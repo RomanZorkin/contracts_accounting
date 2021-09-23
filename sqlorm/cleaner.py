@@ -12,7 +12,7 @@ class Cleaner():
 
     def __init__(self, table_name = None):
         self.table_name = table_name
-        self.table_scheme = table_config[self.table_name]        
+        self.table_scheme = table_config[self.table_name]
         self.columns = self.table_scheme['columns']
         self.id_sql = self._sql_id()
 
@@ -243,13 +243,14 @@ class StructureCleaner(Cleaner):
 
     def __init__(self, table_name = None, inframe=None):
         super().__init__(table_name)
-        self.frame = inframe        
+        self.frame = inframe
         self.function_dict = {
             'budget_commitment' : self._budget_commitment,
             'purchases' : self._purchases,
             'deals' : self._deals,
             'payments_short' : self._payments,
             'payments_full' : self._payments,
+            'commitment_treasury' : self._commitment_treasury,
         }
 
     def _deals(self):
@@ -258,23 +259,36 @@ class StructureCleaner(Cleaner):
     def _payments(self):
         return self.frame
 
+    def _commitment_treasury(self):
+        print('start Structure corrector _commitment_treasury')
+        clean_frame = pd.DataFrame()           
+        clean_frame[self.id_sql] =  self.frame['doc_number'].astype(str) + self.frame['doc_date'].astype(str)
+        self.frame[self.id_sql] = PandasFormat(
+            self.table_name,
+            clean_frame,
+        ).format_corrector()
+        self.frame = self.frame[
+            self.frame['status'] == 'Отражен на ЛС'
+        ]
+        return self.frame
+
     def _purchases(self):
-        print('start Structure corrector _purchases') 
-        clean_frame = pd.DataFrame()   
+        print('start Structure corrector _purchases')
+        clean_frame = pd.DataFrame()
         clean_frame[self.id_sql] = [
             int(value[23:26:]) for value in self.frame['order_number']
         ]
         self.frame[self.id_sql] = PandasFormat(
             self.table_name,
             clean_frame,
-        ).format_corrector()     
+        ).format_corrector()
         return self.frame
 
     def _budget_commitment(self):
         print('start corrector')
         for column in ['year', 'reg_number', 'reg_number_full']:
-            clean_frame = pd.DataFrame() 
-            for object in self.frame['contract_identificator']:                    
+            clean_frame = pd.DataFrame()
+            for object in self.frame['contract_identificator']:
                 clean_frame = clean_frame.append(
                     {
                         column : self.find_reg_number(object)[column]
@@ -286,7 +300,7 @@ class StructureCleaner(Cleaner):
             ).format_corrector()
         self.frame.to_excel('ihj.xlsx')
         return self.frame
-    
+
     def find_reg_number(self, object):
         #print('start find_reg_number')
         extra_dict = {

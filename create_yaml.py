@@ -449,6 +449,84 @@ table = {
             },
         },
     },
+    'commitment_treasury' : {
+        'table_name' : 'deals',
+        'work_sheet' : 'Scroller',
+        'excel_file' : 'external_data_source/Обязательства_ЭБ.xlsx',
+        'excel_rows' : ['5', '2000'],
+        'columns' : {
+            'status' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['E5', 'E2000'],],
+            },
+            'doc_number' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['F5', 'F2000'],],
+            },
+            'doc_date' : {
+                'format' : 'date',
+                'SQL' : True,
+                'excel' : [True, ['G5', 'G2000'],],
+            },
+            'change_number' : {
+                'format' : 'integer',
+                'SQL' : True,
+                'excel' : [True, ['H5', 'H2000'],],
+            },
+            'type' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['I5', 'I2000'],],
+            },
+            'basic_doc_name' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['K5', 'K2000'],],
+            },
+            'basic_doc_number' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['L5', 'L2000'],],
+            },
+            'execution_date' : {
+                'format' : 'date',
+                'SQL' : True,
+                'excel' : [True, ['M5', 'M2000'],],
+            },
+            'amount' : {
+                'format' : 'numeric',
+                'SQL' : True,
+                'excel' : [True, ['N5', 'N2000'],],
+            },
+            'commitment_number' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['P5', 'P2000'],],
+            },
+            'subject' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['S5', 'S2000'],],
+            },
+            'registration_date' : {
+                'format' : 'date',
+                'SQL' : True,
+                'excel' : [True, ['T5', 'T2000'],],
+            },
+            'commitment_date' : {
+                'format' : 'date',
+                'SQL' : True,
+                'excel' : [True, ['V5', 'V2000'],],
+            },
+            'index' : {
+                'format' : 'text PRIMARY KEY',
+                'SQL' : True,
+                'excel' : [False, ['', ''],],
+            },           
+        },
+    },
 }
 
 config = {

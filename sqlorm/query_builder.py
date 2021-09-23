@@ -75,6 +75,18 @@ async def read_row_query_builder(table, insert_query):
 async def all_column_query_builder(table, column):
     return 'SELECT {0} FROM {1};'.format(column, table)
 
+async def find_max_date_row():
+    query = '''
+    SELECT * FROM {0} 
+    WHERE commitment_number = '0015271220000000214' 
+    AND registration_date = 
+    (SELECT MAX(registration_date) FROM {0} 
+    WHERE commitment_number = '0015271220000000214');'''.format(
+        commitment_treasury,
+        comitment,
+        registration_date,
+    )
+    
 '''
 INSERT INTO directories_struct (id, html, css)
 VALUES ($3::int, $1::text, $2::text)
