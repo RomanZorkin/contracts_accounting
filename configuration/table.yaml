@@ -1,0 +1,607 @@
+budget_commitment:
+  columns:
+    advance_amount:
+      SQL: true
+      excel:
+      - true
+      - - L5
+        - L168
+      format: numeric
+    advance_value:
+      SQL: true
+      excel:
+      - true
+      - - K5
+        - K168
+      format: numeric
+    amount:
+      SQL: true
+      excel:
+      - true
+      - - J5
+        - J168
+      format: numeric
+    commitment_date:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: date
+    commitment_number:
+      SQL: true
+      excel:
+      - true
+      - - H5
+        - H168
+      format: text
+    contract_date:
+      SQL: true
+      excel:
+      - true
+      - - B5
+        - B168
+      format: date
+    contract_identificator:
+      SQL: true
+      excel:
+      - true
+      - - A5
+        - A168
+      format: text
+    contract_number:
+      SQL: true
+      excel:
+      - true
+      - - C5
+        - C168
+      format: text
+    execution_date:
+      SQL: true
+      excel:
+      - true
+      - - I5
+        - I168
+      format: date
+    notification_amount:
+      SQL: true
+      excel:
+      - true
+      - - G5
+        - G168
+      format: numeric
+    notification_date:
+      SQL: true
+      excel:
+      - true
+      - - F5
+        - F168
+      format: date
+    notification_number:
+      SQL: true
+      excel:
+      - true
+      - - E5
+        - E168
+      format: text
+    reg_number:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: integer
+    reg_number_full:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text PRIMARY KEY
+    subject:
+      SQL: true
+      excel:
+      - true
+      - - D5
+        - D168
+      format: text
+    year:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+  excel_file: "external_data_source/\u041E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\
+    \u044C\u0441\u0442\u0432\u0430.xlsx"
+  excel_rows:
+  - '5'
+  - '168'
+  table_name: budget_commitment
+  work_sheet: TDSheet
+deals:
+  columns:
+    INN:
+      SQL: true
+      excel:
+      - false
+      - - '81'
+        - '303'
+      format: text
+    KBK:
+      SQL: true
+      excel:
+      - true
+      - - K81
+        - K303
+      format: text
+    amount:
+      SQL: true
+      excel:
+      - true
+      - - N81
+        - N303
+      format: numeric
+    budget_commitment:
+      SQL: true
+      excel:
+      - false
+      - - '81'
+        - '303'
+      format: text
+    contract_date:
+      SQL: true
+      excel:
+      - true
+      - - I81
+        - I303
+      format: date
+    contract_number:
+      SQL: true
+      excel:
+      - true
+      - - C81
+        - C303
+      format: text
+    detalisation:
+      SQL: true
+      excel:
+      - true
+      - - M81
+        - M303
+      format: text
+    execution_date:
+      SQL: true
+      excel:
+      - true
+      - - S81
+        - S303
+      format: date
+    mark_perfomance:
+      SQL: true
+      excel:
+      - true
+      - - Q81
+        - Q303
+      format: boolean
+    partner:
+      SQL: true
+      excel:
+      - true
+      - - H81
+        - H303
+      format: text
+    period:
+      SQL: true
+      excel:
+      - true
+      - - L81
+        - L303
+      format: text
+    purchase_procedure:
+      SQL: true
+      excel:
+      - true
+      - - O81
+        - O303
+      format: text
+    reg_number:
+      SQL: true
+      excel:
+      - true
+      - - B81
+        - B303
+      format: integer PRIMARY KEY
+    responsible:
+      SQL: true
+      excel:
+      - true
+      - - P81
+        - P303
+      format: text
+    state_register_number:
+      SQL: true
+      excel:
+      - true
+      - - J81
+        - J303
+      format: text
+    subject:
+      SQL: true
+      excel:
+      - true
+      - - D81
+        - D303
+      format: text
+    total_amount:
+      SQL: true
+      excel:
+      - false
+      - - '81'
+        - '303'
+      format: numeric
+  excel_file: "external_data_source/\u041F\u043B\u0430\u043D-\u0437\u0430\u043A\u0443\
+    \u043F\u043E\u043A 2021.xlsm"
+  excel_rows:
+  - '81'
+  - '303'
+  table_name: deals
+  work_sheet: "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u044B"
+payments_full:
+  columns:
+    CSR:
+      SQL: true
+      excel:
+      - true
+      - - G7
+        - G916
+      format: text
+    INN:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+    KBK:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+    KOSGU:
+      SQL: true
+      excel:
+      - true
+      - - H7
+        - H916
+      format: text
+    amount:
+      SQL: true
+      excel:
+      - true
+      - - Q7
+        - Q916
+      format: numeric
+    contract_identificator:
+      SQL: true
+      excel:
+      - true
+      - - I7
+        - I916
+      format: text
+    detalization:
+      SQL: true
+      excel:
+      - true
+      - - F7
+        - F916
+      format: text
+    order_date:
+      SQL: true
+      excel:
+      - true
+      - - C7
+        - C916
+      format: date
+    order_number:
+      SQL: true
+      excel:
+      - true
+      - - A7
+        - A916
+      format: integer PRIMARY KEY
+    partner:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+    partner_INN:
+      SQL: true
+      excel:
+      - true
+      - - J7
+        - J916
+      format: text
+    payment_order_date:
+      SQL: true
+      excel:
+      - true
+      - - K7
+        - K916
+      format: date
+    payment_order_number:
+      SQL: true
+      excel:
+      - true
+      - - L7
+        - L916
+      format: text
+    primary_doc_date:
+      SQL: true
+      excel:
+      - true
+      - - M7
+        - M916
+      format: date
+    primary_doc_form:
+      SQL: true
+      excel:
+      - true
+      - - O7
+        - O916
+      format: text
+    primary_doc_number:
+      SQL: true
+      excel:
+      - true
+      - - N7
+        - N916
+      format: text
+    reg_number:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: integer
+    reg_number_full:
+      SQL: true
+      excel:
+      - false
+      - - I7
+        - I916
+      format: text
+    subjekt:
+      SQL: true
+      excel:
+      - true
+      - - D7
+        - D916
+      format: text
+    year:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+  excel_file: "external_data_source/\u0417\u041A\u0420\u043F\u043E\u043B\u043D\u0430\
+    \u044F.xlsx"
+  excel_rows:
+  - '7'
+  - '916'
+  table_name: payments_full
+  work_sheet: TDSheet
+payments_short:
+  columns:
+    CSR:
+      SQL: true
+      excel:
+      - true
+      - - G7
+        - G696
+      format: text
+    INN:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+    KBK:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+    KOSGU:
+      SQL: true
+      excel:
+      - true
+      - - H7
+        - H696
+      format: text
+    amount:
+      SQL: true
+      excel:
+      - true
+      - - Q7
+        - Q696
+      format: numeric
+    contract_identificator:
+      SQL: true
+      excel:
+      - true
+      - - I7
+        - I696
+      format: text
+    detalization:
+      SQL: true
+      excel:
+      - true
+      - - F7
+        - F696
+      format: text
+    order_date:
+      SQL: true
+      excel:
+      - true
+      - - C7
+        - C696
+      format: date
+    order_number:
+      SQL: true
+      excel:
+      - true
+      - - A7
+        - A696
+      format: integer PRIMARY KEY
+    partner:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+    partner_INN:
+      SQL: true
+      excel:
+      - true
+      - - J7
+        - J696
+      format: text
+    payment_order_date:
+      SQL: true
+      excel:
+      - true
+      - - K7
+        - K696
+      format: date
+    payment_order_number:
+      SQL: true
+      excel:
+      - true
+      - - L7
+        - L696
+      format: text
+    primary_doc_date:
+      SQL: true
+      excel:
+      - true
+      - - M7
+        - M696
+      format: date
+    primary_doc_form:
+      SQL: true
+      excel:
+      - true
+      - - O7
+        - O696
+      format: text
+    primary_doc_number:
+      SQL: true
+      excel:
+      - true
+      - - N7
+        - N696
+      format: text
+    reg_number:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: integer
+    reg_number_full:
+      SQL: true
+      excel:
+      - false
+      - - I7
+        - I696
+      format: text
+    subjekt:
+      SQL: true
+      excel:
+      - true
+      - - D7
+        - D696
+      format: text
+    year:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+  excel_file: "external_data_source/\u0417\u041A\u0420\u0441\u043E\u043A\u0440\u0430\
+    \u0449\u0435\u043D\u043D\u0430\u044F.xlsx"
+  excel_rows:
+  - '7'
+  - '696'
+  table_name: payments_short
+  work_sheet: TDSheet
+purchases:
+  columns:
+    OKPD:
+      SQL: true
+      excel:
+      - true
+      - - C22
+        - C206
+      format: text
+    amount:
+      SQL: true
+      excel:
+      - true
+      - - J22
+        - J206
+      format: numeric
+    order_number:
+      SQL: true
+      excel:
+      - true
+      - - B22
+        - B206
+      format: text
+    reg_number:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: integer
+    state_register_number:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: integer PRIMARY KEY
+    subject:
+      SQL: true
+      excel:
+      - true
+      - - F22
+        - F206
+      format: text
+    year:
+      SQL: true
+      excel:
+      - true
+      - - H22
+        - H206
+      format: text
+  excel_file: external_data_source/print form.xlsx
+  excel_rows:
+  - '22'
+  - '206'
+  table_name: purchases
+  work_sheet: Page 1
+tables:
+- deals
+- purchases
