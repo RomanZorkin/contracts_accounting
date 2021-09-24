@@ -1,48 +1,3 @@
-
-SELECT * FROM commitment_treasury WHERE commitment_number = '0015271220000000214' AND registration_date = (SELECT MIN(registration_date) FROM commitment_treasury WHERE commitment_number = '0015271220000000214');
-
-
-(SELECT MIN(registration_date) FROM commitment_treasury WHERE commitment_number = '0015271220000000214')
-
-
-
-FOR temprow IN
-        SELECT * 
-		FROM commitment_treasury 
-		WHERE commitment_number 
-		IN (SELECT commitment_number FROM budget_commitment)
-    LOOP
-		INSERT INTO temptable (commitment_number)		
-        SELECT index 
-		FROM commitment_treasury 
-		WHERE commitment_number = temprow.commitment_number
-		AND registration_date = (SELECT MAX(registration_date) FROM commitment_treasury WHERE commitment_number = temprow.commitment_number)
-    END LOOP;
-
-
-ROLLBACK;
-BEGIN;
-CREATE TEMP TABLE temptable -- стоит использовать наиболее уникальное имя
-ON COMMIT DROP -- удаляем таблицу при завершении транзакции
-AS 
-SELECT 1 AS id, CAST ('какие-то значения' AS TEXT) AS val;
-ALTER TABLE temptable 
-ADD COLUMN commitment_number TEXT;
-
-FOR temprow IN 
-SELECT commitment_number FROM commitment_treasury WHERE commitment_number IN (SELECT commitment_number FROM budget_commitment) 
-LOOP
-INSERT INTO temptable (commitment_number)		
-SELECT index 
-FROM commitment_treasury 
-WHERE commitment_number = temprow.commitment_number
-AND registration_date = (SELECT MAX(registration_date) FROM commitment_treasury WHERE commitment_number = temprow.commitment_number)
-END LOOP;
-END;
-SELECT * FROM temptable;
-
-
-
 CREATE TEMP TABLE temptable -- стоит использовать наиболее уникальное имя
 ON COMMIT DROP -- удаляем таблицу при завершении транзакции
 AS 
@@ -63,6 +18,8 @@ BEGIN
 		SELECT commitment_number			
 		FROM budget_commitment)
    LOOP
+    --INSERT INTO temptable (commitment_number) VALUES (num);
+    --raise notice 'cnt: %', cnt;
 	INSERT INTO temptable (commitment_number)		
 	SELECT index 
 	FROM commitment_treasury 
@@ -73,9 +30,26 @@ PERFORM commitment_number FROM temptable;
 END;
 $$;
 
-SELECT * FROM commitment_treasury
+-- просто выводит все текущие контракты из остальных таблиц
+
+SELECT ct.amount, ct.registration_date, ct.basic_doc_name, b.amount, b.commitment_number, b.reg_number, d.contract_date, d.amount, d.kbk
+FROM commitment_treasury AS ct, budget_commitment AS b, deals AS d
 WHERE index
 IN (
     SELECT commitment_number FROM temptable
 )
+AND b.commitment_number = ct.commitment_number
+AND b.reg_number = d.reg_number
 
+--РАссчитывает суммы по кбк должен стоять признак MAX по датам
+
+SELECT d.kbk, SUM(ct.amount) OVER (PARTITION BY d.kbk) sum_discount     
+FROM commitment_treasury AS ct, budget_commitment AS b, deals AS d
+WHERE index
+IN (
+    SELECT commitment_number FROM temptable
+)
+AND b.commitment_number = ct.commitment_number
+AND b.reg_number = d.reg_number
+AND ctid NOT IN
+(SELECT max(ctid) FROM d GROUP BY d.kbk);
