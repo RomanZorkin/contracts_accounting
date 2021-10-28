@@ -1,0 +1,338 @@
+DEBUG:root:Start data_dict
+INFO:root:start function "start"
+
+DEBUG:root:start FOR data: {'subject': ['string', 1, 2.3, '2021.01.03', True, None, []]}
+DEBUG:root:start FOR key: subject, value: ['string', 1, 2.3, '2021.01.03', True, None, []]
+DEBUG:root:ORIGINAL FRAME
+      subject
+0      string
+1           1
+2         2.3
+3  2021.01.03
+4        True
+5        None
+6          []
+subject    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:CORRECT FRAME
+      subject
+0      string
+1           1
+2         2.3
+3  2021.01.03
+4        True
+5            
+6          []
+subject    object
+dtype: object
+
+
+DEBUG:root:start FOR data: {'reg_number': [1, 2, 3, 3.3, '4', '4.4', True, None, [], '2021.02.05']}
+DEBUG:root:start FOR key: reg_number, value: [1, 2, 3, 3.3, '4', '4.4', True, None, [], '2021.02.05']
+DEBUG:root:ORIGINAL FRAME
+   reg_number
+0           1
+1           2
+2           3
+3         3.3
+4           4
+5         4.4
+6        True
+7        None
+8          []
+9  2021.02.05
+reg_number    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_int PandasForma
+DEBUG:root:CORRECT FRAME
+   reg_number
+0           1
+1           2
+2           3
+3           3
+4           4
+5           4
+6           1
+7           0
+8           0
+9           0
+reg_number    int32
+dtype: object
+
+
+DEBUG:root:start FOR data: {'amount': [1.2, 3.2, 3.3, 1, '1', 'vasy', None, '2021.02.05']}
+DEBUG:root:start FOR key: amount, value: [1.2, 3.2, 3.3, 1, '1', 'vasy', None, '2021.02.05']
+DEBUG:root:ORIGINAL FRAME
+       amount
+0         1.2
+1         3.2
+2         3.3
+3           1
+4           1
+5        vasy
+6        None
+7  2021.02.05
+amount    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_float PandasFormat
+DEBUG:root:CORRECT FRAME
+   amount
+0     1.2
+1     3.2
+2     3.3
+3     1.0
+4     1.0
+5     0.0
+6     0.0
+7     0.0
+amount    float64
+dtype: object
+
+
+DEBUG:root:start FOR data: {'contract_date': ['2021.01.03', '2021/01/02', '2021-02-05', '15/03/21', '15.01.99', '12-03-21', None, 3.2, 'vasy', True, 1, 2, '3', 0, -2]}
+DEBUG:root:start FOR key: contract_date, value: ['2021.01.03', '2021/01/02', '2021-02-05', '15/03/21', '15.01.99', '12-03-21', None, 3.2, 'vasy', True, 1, 2, '3', 0, -2]
+DEBUG:root:ORIGINAL FRAME
+   contract_date
+0     2021.01.03
+1     2021/01/02
+2     2021-02-05
+3       15/03/21
+4       15.01.99
+5       12-03-21
+6           None
+7            3.2
+8           vasy
+9           True
+10             1
+11             2
+12             3
+13             0
+14            -2
+contract_date    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_date PandasFormat
+DEBUG:root:CORRECT FRAME
+                   contract_date
+0  2021-01-03 00:00:00.000000000
+1  2021-01-02 00:00:00.000000000
+2  2021-02-05 00:00:00.000000000
+3  2021-03-15 00:00:00.000000000
+4  1999-01-15 00:00:00.000000000
+5  2021-12-03 00:00:00.000000000
+6  1970-01-01 00:00:00.000000000
+7  1970-01-01 00:00:00.000000003
+8  1970-01-01 00:00:00.000000000
+9  1970-01-01 00:00:00.000000000
+10 1970-01-01 00:00:00.000000001
+11 1970-01-01 00:00:00.000000002
+12 1970-01-01 00:00:00.000000000
+13 1970-01-01 00:00:00.000000000
+14 1969-12-31 23:59:59.999999998
+contract_date    datetime64[ns]
+dtype: object
+
+
+DEBUG:root:start FOR data: {'mark_perfomance': [True, False, None]}
+DEBUG:root:start FOR key: mark_perfomance, value: [True, False, None]
+DEBUG:root:ORIGINAL FRAME
+  mark_perfomance
+0            True
+1           False
+2            None
+mark_perfomance    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_bool PandasFormat
+DEBUG:root:CORRECT FRAME
+   mark_perfomance
+0             True
+1            False
+2            False
+mark_perfomance    boolean
+dtype: object
+
+
+DEBUG:root:Start data_dict
+INFO:root:start function "start"
+
+DEBUG:root:start FOR data: {'subject': ['string', 1, 2.3, '2021.01.03', True, None, []]}
+DEBUG:root:start FOR key: subject, value: ['string', 1, 2.3, '2021.01.03', True, None, []]
+DEBUG:root:ORIGINAL FRAME
+      subject
+0      string
+1           1
+2         2.3
+3  2021.01.03
+4        True
+5        None
+6          []
+subject    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:CORRECT FRAME
+      subject
+0      string
+1           1
+2         2.3
+3  2021.01.03
+4        True
+5            
+6          []
+subject    object
+dtype: object
+
+
+DEBUG:root:start FOR data: {'reg_number': [1, 2, 3, 3.3, '4', '4.4', True, None, [], '2021.02.05']}
+DEBUG:root:start FOR key: reg_number, value: [1, 2, 3, 3.3, '4', '4.4', True, None, [], '2021.02.05']
+DEBUG:root:ORIGINAL FRAME
+   reg_number
+0           1
+1           2
+2           3
+3         3.3
+4           4
+5         4.4
+6        True
+7        None
+8          []
+9  2021.02.05
+reg_number    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_int PandasForma
+DEBUG:root:CORRECT FRAME
+   reg_number
+0           1
+1           2
+2           3
+3           3
+4           4
+5           4
+6           1
+7           0
+8           0
+9           0
+reg_number    int32
+dtype: object
+
+
+DEBUG:root:start FOR data: {'amount': [1.2, 3.2, 3.3, 1, '1', 'vasy', None, '2021.02.05']}
+DEBUG:root:start FOR key: amount, value: [1.2, 3.2, 3.3, 1, '1', 'vasy', None, '2021.02.05']
+DEBUG:root:ORIGINAL FRAME
+       amount
+0         1.2
+1         3.2
+2         3.3
+3           1
+4           1
+5        vasy
+6        None
+7  2021.02.05
+amount    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_float PandasFormat
+DEBUG:root:CORRECT FRAME
+   amount
+0     1.2
+1     3.2
+2     3.3
+3     1.0
+4     1.0
+5     0.0
+6     0.0
+7     0.0
+amount    float64
+dtype: object
+
+
+DEBUG:root:start FOR data: {'contract_date': ['2021.01.03', '2021/01/02', '2021-02-05', '15/03/21', '15.01.99', '12-03-21', None, 3.2, 'vasy', True, 1, 2, '3', 0, -2]}
+DEBUG:root:start FOR key: contract_date, value: ['2021.01.03', '2021/01/02', '2021-02-05', '15/03/21', '15.01.99', '12-03-21', None, 3.2, 'vasy', True, 1, 2, '3', 0, -2]
+DEBUG:root:ORIGINAL FRAME
+   contract_date
+0     2021.01.03
+1     2021/01/02
+2     2021-02-05
+3       15/03/21
+4       15.01.99
+5       12-03-21
+6           None
+7            3.2
+8           vasy
+9           True
+10             1
+11             2
+12             3
+13             0
+14            -2
+contract_date    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_date PandasFormat
+DEBUG:root:CORRECT FRAME
+                   contract_date
+0  2021-01-03 00:00:00.000000000
+1  2021-01-02 00:00:00.000000000
+2  2021-02-05 00:00:00.000000000
+3  2021-03-15 00:00:00.000000000
+4  1999-01-15 00:00:00.000000000
+5  2021-12-03 00:00:00.000000000
+6  1970-01-01 00:00:00.000000000
+7  1970-01-01 00:00:00.000000003
+8  1970-01-01 00:00:00.000000000
+9  1970-01-01 00:00:00.000000000
+10 1970-01-01 00:00:00.000000001
+11 1970-01-01 00:00:00.000000002
+12 1970-01-01 00:00:00.000000000
+13 1970-01-01 00:00:00.000000000
+14 1969-12-31 23:59:59.999999998
+contract_date    datetime64[ns]
+dtype: object
+
+
+DEBUG:root:start FOR data: {'mark_perfomance': [True, False, None]}
+DEBUG:root:start FOR key: mark_perfomance, value: [True, False, None]
+DEBUG:root:ORIGINAL FRAME
+  mark_perfomance
+0            True
+1           False
+2            None
+mark_perfomance    object
+dtype: object
+
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_bool PandasFormat
+DEBUG:root:CORRECT FRAME
+   mark_perfomance
+0             True
+1            False
+2            False
+mark_perfomance    boolean
+dtype: object
+
+

@@ -9,6 +9,7 @@ import os
 import asyncio
 import configparser
 from pathlib import *
+import logging
 
 import asyncpg
 

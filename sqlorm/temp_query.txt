@@ -43,6 +43,12 @@ AND b.reg_number = d.reg_number
 
 --РАссчитывает суммы по кбк должен стоять признак MAX по датам
 
+CREATE TEMP TABLE temp_table_12 -- стоит использовать наиболее уникальное имя
+ON COMMIT DROP -- удаляем таблицу при завершении транзакции
+AS 
+SELECT *
+FROM 
+(
 SELECT d.kbk, SUM(ct.amount) OVER (PARTITION BY d.kbk) sum_discount     
 FROM commitment_treasury AS ct, budget_commitment AS b, deals AS d
 WHERE index
@@ -51,5 +57,13 @@ IN (
 )
 AND b.commitment_number = ct.commitment_number
 AND b.reg_number = d.reg_number
-AND ctid NOT IN
-(SELECT max(ctid) FROM d GROUP BY d.kbk);
+) AS combined;
+
+
+DELETE 
+FROM temp_table_12 
+WHERE ctid 
+NOT IN
+(SELECT MAX(ctid) FROM temp_table_12 GROUP BY temp_table_12.kbk);
+
+SELECT * FROM temp_table_12

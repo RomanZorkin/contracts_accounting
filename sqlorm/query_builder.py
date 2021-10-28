@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 async def create_query_builder(table_sheme):
     """

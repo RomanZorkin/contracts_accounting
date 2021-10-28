@@ -1,4 +1,5 @@
 import time
+import logging
 start_time1 = time.time()
 
 import file_reader 

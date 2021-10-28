@@ -1,6 +1,7 @@
 from pathlib import *
 import asyncio
 import yaml
+import logging
 
 from sqlorm import run
 

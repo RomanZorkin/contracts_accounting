@@ -119,6 +119,113 @@ budget_commitment:
   - '168'
   table_name: budget_commitment
   work_sheet: TDSheet
+commitment_treasury:
+  columns:
+    amount:
+      SQL: true
+      excel:
+      - true
+      - - N5
+        - N2000
+      format: numeric
+    basic_doc_name:
+      SQL: true
+      excel:
+      - true
+      - - K5
+        - K2000
+      format: text
+    basic_doc_number:
+      SQL: true
+      excel:
+      - true
+      - - L5
+        - L2000
+      format: text
+    change_number:
+      SQL: true
+      excel:
+      - true
+      - - H5
+        - H2000
+      format: integer
+    commitment_date:
+      SQL: true
+      excel:
+      - true
+      - - V5
+        - V2000
+      format: date
+    commitment_number:
+      SQL: true
+      excel:
+      - true
+      - - P5
+        - P2000
+      format: text
+    doc_date:
+      SQL: true
+      excel:
+      - true
+      - - G5
+        - G2000
+      format: date
+    doc_number:
+      SQL: true
+      excel:
+      - true
+      - - F5
+        - F2000
+      format: text
+    execution_date:
+      SQL: true
+      excel:
+      - true
+      - - M5
+        - M2000
+      format: date
+    index:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text PRIMARY KEY
+    registration_date:
+      SQL: true
+      excel:
+      - true
+      - - T5
+        - T2000
+      format: date
+    status:
+      SQL: true
+      excel:
+      - true
+      - - E5
+        - E2000
+      format: text
+    subject:
+      SQL: true
+      excel:
+      - true
+      - - S5
+        - S2000
+      format: text
+    type:
+      SQL: true
+      excel:
+      - true
+      - - I5
+        - I2000
+      format: text
+  excel_file: "external_data_source/\u041E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\
+    \u044C\u0441\u0442\u0432\u0430_\u042D\u0411.xlsx"
+  excel_rows:
+  - '5'
+  - '2000'
+  table_name: deals
+  work_sheet: Scroller
 deals:
   columns:
     INN:
@@ -339,7 +446,7 @@ payments_full:
       - true
       - - L7
         - L916
-      format: text
+      format: integer
     primary_doc_date:
       SQL: true
       excel:
@@ -488,7 +595,7 @@ payments_short:
       - true
       - - L7
         - L696
-      format: text
+      format: integer
     primary_doc_date:
       SQL: true
       excel:

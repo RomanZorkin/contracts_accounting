@@ -2,6 +2,7 @@ import datetime
 import pandas as pd
 from pathlib import *
 import yaml
+import logging
 
 
 config_file = Path('configuration/table.yaml')
@@ -135,12 +136,15 @@ class PandasFormat(Cleaner):
             'numeric' : self._to_float,
             'text' : self._to_str,
         }
+        logging.debug('start PandasFormat')
 
     def _to_str(self, parametrs=None):
+        logging.debug('start _to_str PandasFormat')
         print('start _to_str PandasFormat')
         return self.frame.fillna('')
 
     def _to_int(self, parametrs=None):
+        logging.debug('start _to_int PandasForma')
         print('start _to_int PandasFormat')
         float_df = pd.DataFrame()
         float_df[list(self.frame)[0]] = pd.to_numeric(
@@ -150,6 +154,7 @@ class PandasFormat(Cleaner):
         return float_df.astype('int')
 
     def _to_float(self, parametrs=None):
+        logging.debug('start _to_float PandasFormat')
         print('start _to_float PandasFormat')
         float_df = pd.DataFrame()
         float_df[list(self.frame)[0]] = pd.to_numeric(
@@ -159,6 +164,7 @@ class PandasFormat(Cleaner):
         return  float_df.astype('float')
 
     def _to_date(self, parametrs=0):
+        logging.debug('start _to_date PandasFormat')
         print('start _to_date PandasFormat')
         date_df = pd.DataFrame()
         date_df[list(self.frame)[0]] = pd.to_datetime(
@@ -171,10 +177,12 @@ class PandasFormat(Cleaner):
         return date_df
 
     def _to_bool(self, parametrs=None):
+        logging.debug('start _to_bool PandasFormat')
         print('start _to_bool PandasFormat')
         return self.frame.astype('boolean').fillna(False)
 
     def format_corrector(self):
+        logging.debug('start format_corrector')
         return  self.function_dict[
             self.format(
                 list(self.frame)[0]
