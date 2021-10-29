@@ -6,9 +6,6 @@ from typing import Dict, List
 
 import yaml
 
-import file_reader
-from sqlorm import sql_admin
-
 start_time = time.time()
 
 config_file = Path('configuration/config.yaml')
@@ -128,19 +125,3 @@ class Counter(object):
                 f'--- {time.time() - start_time} время выполнения PYTHON скрипта ---',
             )
         print('Записан файл ', self.csv_file)
-
-
-question = """
-    Введите вариант подсчета сканов:\n
-    1. введите - 1, если требуется обновить базу данных\n
-    время обработки запроса - не более 9 секунд
-    2. введите - 2, если обновление не требуется\n
-    время обработки запроса - не более 1,5 секунд
-"""
-choice = str(input(question))
-
-if choice == '1':
-    file_reader.Excel_reader('deals').table_to_sql()
-
-run = Counter(sql_admin.Scheme('deals'), '2021')
-run.make_report()
