@@ -15,11 +15,7 @@ start_time = time.time()
 config_file = Path('configuration/table.yaml')
 
 with open(config_file) as fh:
-    table_config = yaml.load(fh, Loader=yaml.FullLoader)
-
-logging.debug(
-    'Scheme class inicialisation %s' % (time.time() - start_time),
-)
+    table_config = yaml.safe_load(fh)
 
 
 class Reader(object):
@@ -87,24 +83,6 @@ class FrameHandler(Reader):
     the data contained in them, and corrects them if necessary
     """
 
-    def dict_to_frame(self) -> pd.DataFrame:
-        """Convert dictionary to pandas DataFrame.
-
-        The method generates a dictionary in the format: key - column name;
-        value - a list with column values. The dictionary is converted into
-        a pandas date frame.
-
-        Returns:
-            pd.DataFrame: date frame with data received from the file.
-        """
-        # отловить ошибку формирует словарь в  независимости от знчений redaer
-        # формирует, даже если пусто
-        df_dict = {
-            column: self.read(column) for column in self.excel_columns
-        }
-        logging.debug('finish dict_to_frame %s' % (time.time() - start_time))
-        return pd.DataFrame(df_dict)
-
     def frame_corrector(self, frame: pd.DataFrame) -> pd.DataFrame:
         """Format dataframe data.
 
@@ -124,7 +102,7 @@ class FrameHandler(Reader):
             inframe=frame,
         ).structure_corrector()
 
-    def frame_to_dict(self, frame: pd.DataFrame) -> Dict[Any, Any]:
+    def frame_to_dict(self, frame: pd.DataFrame) -> Dict[int, Dict[str, Any]]:
         """Convert pandas DataFrame to dictionary.
 
         The method converts the pandaы DataFrame into a dictionary.
@@ -142,7 +120,7 @@ class FrameHandler(Reader):
             frame (pd.DataFrame): DataFrame with file data.
 
         Returns:
-            Dict[Any, Any]: dict format
+            Dict[int, Dict[str, Any]]: dict format
                 {0:{'table_name':'deals', 'reg_number':1, 'KBK':"'22'", ... },
                 1:{'table_name':'deals', 'reg_number': 1, 'KBK':"'22'", ... }}
         """
@@ -202,10 +180,6 @@ class ExcelReader(FrameHandler):
         self.excel_rows: List[str] = self.table_scheme['excel_rows']
         self.excel_columns: List[str] = self._excel_columns()
         self.excel_cells: Dict[str, List[str]] = self._excel_cells()
-        logging.debug(
-            'start excel inicialisation %s' % (time.time() - start_time),
-            self.excel_file,
-        )
         self.wb_obj = openpyxl.load_workbook(self.excel_file)
         self.ws = self.wb_obj[self._work_sheet]
 
@@ -249,14 +223,13 @@ class ExcelReader(FrameHandler):
                 pd.DataFrame(self.read(column), columns=[column]),
             ).format_corrector()
             frame[column] = clean_frame[column]
-        logging.debug('finish list_to_frame %s' % (time.time() - start_time))
         return frame
 
-    def big_dict_to_sql(self, dict_to_sql: Dict[Any, Any]) -> None:
+    def big_dict_to_sql(self, dict_to_sql: Dict[int, Dict[str, Any]]) -> None:
         """Start the procedure of writing to the database.
 
         Args:
-            dict_to_sql (Dict[Any, Any]): dictionary with data to write
+            dict_to_sql ( Dict[int, Dict]): dictionary with data to write
                 to the database
         """
         self.sql_scheme.insert_big_data(dict_to_sql, self.id_sql)
@@ -264,6 +237,7 @@ class ExcelReader(FrameHandler):
     def table_to_sql(self) -> None:
         """Run a method to write data to the database."""
         self.big_dict_to_sql(self.frame_to_dict(self.list_to_frame()))
+        logging.debug('finish file_reader.table_to_sql')
 
     def _excel_cells(self) -> Dict[str, List[str]]:
         """Return the range of readable cells in the column.

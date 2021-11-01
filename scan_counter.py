@@ -10,7 +10,7 @@ start_time = time.time()
 
 config_file = Path('configuration/config.yaml')
 with open(config_file) as fh:
-    scan_config = yaml.load(fh, Loader=yaml.FullLoader)
+    scan_config = yaml.safe_load(fh)
 
 
 class Counter(object):
@@ -35,7 +35,12 @@ class Counter(object):
     """
 
     def __init__(self, sql_scheme, year):
-        """Docstring _init_."""
+        """Init Counter class.
+
+        Args:
+            sql_scheme (sql_admin.Scheme): sql_admin.Scheme object.
+            year (str): contracts period.
+        """
         self.sql_scheme = sql_scheme
         self.scan_dir: Path = Path(scan_config['scans'], str(year))
         self.csv_file: Path = Path(self.scan_dir, 'scan.csv')
@@ -122,6 +127,7 @@ class Counter(object):
             for number, subject in self.find_subject_all().items():
                 excel.write(f' Дог № {number};{subject}\n')
             excel.write(
-                f'--- {time.time() - start_time} время выполнения PYTHON скрипта ---',
+                '--- {0} время выполнения PYTHON скрипта ---'.format(
+                    time.time() - start_time,
+                ),
             )
-        print('Записан файл ', self.csv_file)

@@ -22,7 +22,7 @@ config.read(config_file)
 
 connection_rule = config['DB_connection']['rule']
 
-class DBTable():
+class DBTable(object):
     """
     Class rule by Db tables
     """
@@ -126,40 +126,3 @@ class DBTable():
         """.format(self.table_name,)
         )
         await conn.close()
-
-'''
-#print(config._sections['deals_table'])
-first_table = DBTable(config._sections['deals_table'])
-#first_table.create_table()
-loop = asyncio.get_event_loop()
-#loop.run_until_complete(first_table.create_table())
-insert_data = {
-    "table_name" : "deals",
-    "reg_number" : 4,
-    "contract_number": "'text contract_number1'",
-    "subject" : "'text subject'",
-    "partner" : "'text partner'",
-    "INN" : "'222019574'",
-    "contract_date" : "'1999-01-08'",
-    "state_register_number" : "'text state_register_number'",
-    "KBK" : "'text KBK'",
-    "period" : "'text period'",
-    "detalisation" : "'text detalisation'",
-    "amount" : 45625.15,
-    "purchase_procedure" : "'text purchase_procedure'",
-    "responsible" : "'text responsible'",
-    "mark_perfomance" : "true",
-    "execution_date" : "'1999-01-08'",
-    "budget_commitment" : "'0015271221000000143'"
-}
-
-insert_data1 = {
-    "table_name" : "deals",
-    "reg_number" : 2,
-    "contract_number": "'text contract_number'",
-}
-loop.run_until_complete(first_table.create_table())
-loop.run_until_complete(first_table.edit_table(insert_data))
-#loop.run_until_complete(first_table.delete_table())
-#print(first_table.columns)
-'''
