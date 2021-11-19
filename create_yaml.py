@@ -9,7 +9,14 @@ config_file = {
 }
 # Declare a python object with data
 table = {
-    'tables' : ['deals', 'purchases', ],
+    'tables' : [
+        'deals',
+        'purchases',
+        'budget_commitment',
+        'payments_short',
+        'payments_full',
+        'commitment_treasury',
+    ],
     'deals' : {
         'table_name' : 'deals',
         'work_sheet' : 'Договоры',
@@ -101,6 +108,11 @@ table = {
                 'SQL' : True,
                 'excel' : [False, ['81','303'],],
             },
+            'buget_year' :{
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [False, ['81','303'],],
+            },
         },
     },
     'purchases' : {
@@ -110,7 +122,7 @@ table = {
         'excel_rows' : ['22', '206'],
         'columns' : {
             'order_number' : {
-                'format' : 'text',
+                'format' : 'text PRIMARY KEY',
                 'SQL' : True,
                 'excel' : [True, ['B22', 'B206'],],
             },
@@ -124,7 +136,7 @@ table = {
                 'SQL' : True,
                 'excel' : [True, ['F22', 'F206'],],
             },
-            'year' : {
+            'budget_year' : {
                 'format' : 'text',
                 'SQL' : True,
                 'excel' : [True, ['H22', 'H206'],],
@@ -135,7 +147,7 @@ table = {
                 'excel' : [True, ['J22', 'J206'],],
             },
             'state_register_number' : {
-                'format' : 'integer PRIMARY KEY',
+                'format' : 'integer',
                 'SQL' : True,
                 'excel' : [False, ['', ''],],
             },

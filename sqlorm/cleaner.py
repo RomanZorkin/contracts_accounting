@@ -3,27 +3,58 @@ import pandas as pd
 from pathlib import *
 import yaml
 import logging
+from typing import Any, Dict, List, Optional
 
 
 config_file = Path('configuration/table.yaml')
 with open(config_file) as fh:
     table_config = yaml.load(fh, Loader=yaml.FullLoader)
 
-class Cleaner():
+class Cleaner(object):
+    """Base class for bringing objects to the established formats.
 
-    def __init__(self, table_name = None):
-        self.table_name = table_name
-        self.table_scheme = table_config[self.table_name]
-        self.columns = self.table_scheme['columns']
-        self.id_sql = self._sql_id()
+    Atributes:
+        table_name (str): the name of the table for which we apply the\
+            corresponding rules from configuration file "table.yaml".
+        table_scheme (Dict): a dictionary with all the rules, parameters and\
+            settings for the table. The following parameters are passed:\
+            the name of the table, the name of the file to read,\
+            the sheet to read, the column settings (names, data format,\
+            which are used for sql, the range of cells in excel, etc.).
+        columns (Dict): dictionary with column parameters\
+            key - column name, value - dictionary with parameters.
+        id_sql (str): name of PRIMARY KEY sql column.
+    """
 
-    def _sql_id(self):
+    def __init__(self, table_name: str):
+        """Init Reader class.
+
+        Args:
+            table (str): the name of the table for which we apply the
+                corresponding rules from configuration file "table.yaml".
+        """
+        self.table_name: str = table_name
+        self.table_scheme: Dict[str, Any] = table_config[self.table_name]
+        self.columns: Dict[str, Dict[str, Any]] = self.table_scheme['columns']
+        self.id_sql: str  = self._sql_id()
+
+    def _sql_id(self) -> str:
+        """Form name of PRIMARY KEY sql column.
+
+        Returns:
+            str: PRIMARY KEY sql column name.
+        """
         for column in self.columns:
             format = self.columns[column]['format'].split(' ')
             if len(format) > 1:
                 return column
 
-    def format(self, column):
+    def format(self, column: str) -> str:
+        """Generate the data format for the corresponding column.
+
+        Returns:
+            str:  data format for the corresponding column.
+        """
         format = self.columns[column]['format'].split(' ')
         return format[0]
 
@@ -248,11 +279,28 @@ class ValueCleaner(Cleaner):
 
 
 class StructureCleaner(Cleaner):
+    """"Fills the date frame with information missing from the source file.
 
-    def __init__(self, table_name = None, inframe=None):
+    The structure of sql tables may contain columns that are not in the file
+    from where the data is being read. This class implements methods that
+    allow you to fill such columns with data. The data is obtained by the
+    calculation method.
+
+    Atributes:
+        frame (pd.DataFrame):
+        function_dict (Dict[str, Any]):
+    """
+
+    def __init__(self, table_name: str, inframe: pd.DataFrame):
+        """Init StructureCleaner class.
+
+        Args:
+            table_name (str):
+            inframe (pd.DataFrame):
+        """
         super().__init__(table_name)
-        self.frame = inframe
-        self.function_dict = {
+        self.frame: pd.DataFrame = inframe
+        self.function_dict: Dict[str, Any] = {
             'budget_commitment' : self._budget_commitment,
             'purchases' : self._purchases,
             'deals' : self._deals,
@@ -261,16 +309,35 @@ class StructureCleaner(Cleaner):
             'commitment_treasury' : self._commitment_treasury,
         }
 
-    def _deals(self):
+    def _deals(self) -> pd.DataFrame:
+        """Correct the data structure of the "deals" table.
+
+        Returns:
+            pd.DataFrame: new DataFrame
+        """
         return self.frame
 
-    def _payments(self):
+    def _payments(self) -> pd.DataFrame:
+        """Correct the data structure of the "payments" table.
+
+        Returns:
+            pd.DataFrame: new DataFrame
+        """
         return self.frame
 
-    def _commitment_treasury(self):
+    def _commitment_treasury(self) -> pd.DataFrame:
+        """Correct the data structure of the "commitment_treasury" table.
+
+        Generates a unique value for the SQL prmery ID column. In the source
+        file, the values can be repeated in each column. To create a unique
+        value, the values document number and document date are summed up
+
+        Returns:
+            pd.DataFrame: new DataFrame
+        """
         print('start Structure corrector _commitment_treasury')
-        clean_frame = pd.DataFrame()           
-        clean_frame[self.id_sql] =  self.frame['doc_number'].astype(str) + self.frame['doc_date'].astype(str)
+        clean_frame = pd.DataFrame()
+        clean_frame[self.id_sql] = self.frame['doc_number'].astype(str) + self.frame['doc_date'].astype(str)
         self.frame[self.id_sql] = PandasFormat(
             self.table_name,
             clean_frame,
@@ -280,26 +347,49 @@ class StructureCleaner(Cleaner):
         ]
         return self.frame
 
-    def _purchases(self):
+    def _purchases(self) -> pd.DataFrame:
+        """Correct the data structure of the "purchases" table.
+
+        There is no short purchase number in the source file.
+        The number is calculated by extracting 3 digits from the unique
+        purchase number - from 24 to 26 characters.
+        Short numbers can be repeated.
+
+        Returns:
+            pd.DataFrame: new DataFrame
+        """
         print('start Structure corrector _purchases')
         clean_frame = pd.DataFrame()
-        clean_frame[self.id_sql] = [
+        clean_frame['state_register_number'] = [
             int(value[23:26:]) for value in self.frame['order_number']
         ]
-        self.frame[self.id_sql] = PandasFormat(
+        self.frame['state_register_number'] = PandasFormat(
             self.table_name,
             clean_frame,
         ).format_corrector()
         return self.frame
 
-    def _budget_commitment(self):
-        print('start corrector')
+    def _budget_commitment(self) -> pd.DataFrame:
+        """Correct the data structure of the "budget_commitment" table.
+
+        The columns "year", "reg_numbers", "reg_number_full" are missing
+        in the source file. These columns are filled in by calculation.
+        From the "contract_identificator" column, the contract attribute
+        is extracted in the format "25/21", where 25 is the registration
+        number, and 21 is the budget year of the contract.
+
+        Returns:
+            pd.DataFrame: new DataFrame
+        """  
+        # list of columns      
         for column in ['year', 'reg_number', 'reg_number_full']:
             clean_frame = pd.DataFrame()
-            for object in self.frame['contract_identificator']:
+            # information is extracted line by line from the 
+            # "contract_identificator" column
+            for deal_object in self.frame['contract_identificator']:
                 clean_frame = clean_frame.append(
                     {
-                        column : self.find_reg_number(object)[column]
+                        column: self.find_reg_number(deal_object)[column]
                     }, ignore_index=True
                 )
             self.frame[column] = PandasFormat(
@@ -309,27 +399,25 @@ class StructureCleaner(Cleaner):
         self.frame.to_excel('ihj.xlsx')
         return self.frame
 
-    def find_reg_number(self, object):
-        #print('start find_reg_number')
-        extra_dict = {
-            'year' : 0,
+    def find_reg_number(self, deal_object: str) -> Dict[str, Any]:        
+        extra_dict: Dict[str, Any] = {
+            'year' : '0',
             'reg_number' : 0,
             'reg_number_full' : '0/0',
         }
-        object = object.replace("'", "")
-        work_list = object.split('/')
+        deal_object = deal_object.replace("'", "")
+        work_list = deal_object.split('/')
         work_len = len(work_list)
         if work_len > 1:
             num_list = work_list[work_len-2].split(' ')
             num_len = len(num_list)
-            try:
-                #print('work_list', work_list[work_len-1], 'num_list', num_list[num_len-1])
-                extra_dict['year'] = int(work_list[work_len-1])+2000
+            try:                
+                extra_dict['year'] = str(int(work_list[work_len-1])+2000)
                 extra_dict['reg_number'] = int(num_list[num_len-1])
                 extra_dict['reg_number_full'] = str(
                     '{0}/{1}'.format(
                         extra_dict['reg_number'],
-                        extra_dict['year']-2000,
+                        int(extra_dict['year'])-2000,
                     )
                 )
                 return extra_dict
@@ -340,9 +428,9 @@ class StructureCleaner(Cleaner):
         else:
             return extra_dict
 
-    def none_row_deleter(self):
+    def none_row_deleter(self) -> pd.DataFrame:
         self.frame = self.frame[(frame.one > 0)|(frame.two > 0)|(frame.three > 0)]
 
-    def structure_corrector(self):
+    def structure_corrector(self) -> pd.DataFrame:
         return self.function_dict[self.table_name]()
 

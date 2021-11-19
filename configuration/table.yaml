@@ -256,6 +256,13 @@ deals:
       - - '81'
         - '303'
       format: text
+    buget_year:
+      SQL: true
+      excel:
+      - false
+      - - '81'
+        - '303'
+      format: text
     contract_date:
       SQL: true
       excel:
@@ -668,13 +675,20 @@ purchases:
       - - J22
         - J206
       format: numeric
+    budget_year:
+      SQL: true
+      excel:
+      - true
+      - - H22
+        - H206
+      format: text
     order_number:
       SQL: true
       excel:
       - true
       - - B22
         - B206
-      format: text
+      format: text PRIMARY KEY
     reg_number:
       SQL: true
       excel:
@@ -688,20 +702,13 @@ purchases:
       - false
       - - ''
         - ''
-      format: integer PRIMARY KEY
+      format: integer
     subject:
       SQL: true
       excel:
       - true
       - - F22
         - F206
-      format: text
-    year:
-      SQL: true
-      excel:
-      - true
-      - - H22
-        - H206
       format: text
   excel_file: external_data_source/print form.xlsx
   excel_rows:
@@ -712,3 +719,7 @@ purchases:
 tables:
 - deals
 - purchases
+- budget_commitment
+- payments_short
+- payments_full
+- commitment_treasury

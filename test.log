@@ -1,0 +1,49 @@
+DEBUG:root:table_admin0.0
+DEBUG:root:start table in DB cheker
+DEBUG:asyncio:Using proactor: IocpProactor
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_float PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_float PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_float PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_date PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_date PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_float PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_date PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_int PandasForma
+DEBUG:root:start PandasFormat
+DEBUG:root:start format_corrector
+DEBUG:root:start _to_str PandasFormat
+DEBUG:root:finish file_reader.table_to_sql
