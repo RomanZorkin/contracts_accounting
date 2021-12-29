@@ -1,0 +1,55 @@
+<h1 align='center' style="color:rgb(240, 61, 16)">
+    <big>Государственные контракты войсковой части 68895</big>
+</h1>
+<h2><a href="{% url 'index' %}">Главная</a></h2>
+<h2><a href="{% url 'deals' %}">Полный список</a></h2>
+
+<table border="1">
+        <tr>
+            <th>Характеристика</th>
+            <th>Значение</th>
+        </tr>
+    {% for row in table1 %}
+        <tr>
+            <td>Рег номер</td>
+            <td align='center'>{{ row.reg_number }}</td>
+        </tr>
+        <tr>
+            <td>Предмет</td>
+            <td>{{ row.subject }}</td>
+        </tr>
+        <tr>
+            <td>Контрагент</td>
+            <td>{{ row.partner }}</td>
+        </tr>
+        <tr>
+            <td>Сумма контракта</td>
+            <td>{{ row.amount }}</td>
+        </tr>
+        <tr>
+            <td>Номер контракта</td>
+            <td>{{ row.contract_number }}</td>
+        </tr>
+        <tr>
+            <td>Дата контракта</td>
+            <td>{{ row.contract_date }}</td>
+        </tr>
+        <tr>
+            <td>Код бюджетной классификации</td>
+            <td>{{ row.kbk }}</td>
+        </tr>
+        <tr>
+            <td>Довольствующий орган</td>
+            <td>{{ row.detalisation }}</td>
+        </tr>
+        <tr>
+            <td>Ответственный исполнитель</td>
+            <td align='center'>{{ row.responsible }}</td>
+        </tr>
+        <tr>
+            <td>Дата исполнения контракта</td>
+            <td>{{ row.execution_date }}</td>
+        </tr>
+
+    {% endfor %}
+</table>

@@ -2,6 +2,7 @@
 
 import logging
 import time
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -45,6 +46,7 @@ class Reader(object):
         id_sql (str): name of PRIMARY KEY sql column.
         sql_scheme: sql_admin.Scheme object. Required for\
             interaction with postgresql.
+        budget_year (int): finance year.
     """
 
     def __init__(self, table: str):
@@ -63,6 +65,7 @@ class Reader(object):
         self.columns: List[str] = list(self.columns_scheme)
         self.id_sql: str = self._sql_id()
         self.sql_scheme = sql_admin.Scheme(self.table_name)
+        self.budget_year: int = None
 
     def _sql_id(self) -> str:
         """Form name of PRIMARY KEY sql column.
@@ -262,3 +265,82 @@ class ExcelReader(FrameHandler):
         return [
             col for col in self.columns if self.columns_scheme[col]['excel'][0]
         ]
+
+
+class XmlReader(FrameHandler):
+    """FrameHandler subclass for reading xml files.
+
+    Read information from xml files and writes it
+    to the postgresql database. The read data is transferred to the Dataframe.
+    It is more convenient to work with data in this form. The Dataframe is
+    checked for compliance with the established formats and correctness of
+    the received data. After checking and converting the data, they are
+    transferred to the database for writing.
+
+    Attributes:
+        xml_file (Path): path to xml file. The path is determined by\
+            the configuration file "table.yaml". The internal\
+            directory is used - "external_data_source".
+        xml_obj (ElementTree): ElementTree object
+        base_tag (str):
+
+    """
+
+    def __init__(self, table: str):
+        """Init Reader class.
+
+        Args:
+            table (str): the name of the table for which we apply the
+                corresponding rules from configuration file "table.yaml".
+        """
+        super().__init__(table)
+        self.xml_file: Path = Path(self.table_scheme['xml_file'])
+        self.xml_obj: ElementTree = ET.parse(self.xml_file).getroot()
+        self.base_tag = self.table_scheme['base_tag']
+        self.budget_year = self.xml_obj.find(
+            self.table_scheme['budget_year']
+        ).text
+
+    def read(self) -> List[Dict[str, Any]]:
+        data_list = []
+        position = 0
+        #перебор по базовым однотипным позициям
+        for level in self.xml_obj.iter(self.base_tag):
+            position += 1
+            data_dict = {}
+            #перебор внутри позиции по заданным элементам
+            for column in self.columns:
+                xml_tag = self.table_scheme['columns'][column]['xml'][1]
+                curent_level = level.find(xml_tag)
+                try:
+                    data_dict[column] = curent_level.text
+                except:
+                    data_dict[column] = None
+            data_dict['budget_year'] = self.budget_year
+            data_list.append(data_dict)
+        return data_list
+
+    def list_to_frame(self)  -> pd.DataFrame:       
+        return self.frame_corrector(
+            cleaner.PandasFormat(
+                self.table_name,
+            ).big_frame_format_corrector(pd.DataFrame(self.read()))
+        )
+
+    def xml_to_excel(self):
+        self.list_to_frame().to_excel("tmp/output.xlsx")
+    
+    def big_dict_to_sql(self, dict_to_sql: Dict[int, Dict[str, Any]]) -> None:
+        """Start the procedure of writing to the database.
+
+        Args:
+            dict_to_sql ( Dict[int, Dict]): dictionary with data to write
+                to the database
+        """
+        self.sql_scheme.insert_big_data(dict_to_sql, self.id_sql)
+
+    def table_to_sql(self) -> None:
+        """Run a method to write data to the database."""
+        self.big_dict_to_sql(self.frame_to_dict(self.list_to_frame()))
+        logging.debug('finish file_reader.table_to_sql')
+        

@@ -1,4 +1,5 @@
 budget_commitment:
+  budget_year: ''
   columns:
     advance_amount:
       SQL: true
@@ -117,9 +118,11 @@ budget_commitment:
   excel_rows:
   - '5'
   - '168'
+  file_format: excel
   table_name: budget_commitment
   work_sheet: TDSheet
 commitment_treasury:
+  budget_year: ''
   columns:
     amount:
       SQL: true
@@ -224,9 +227,11 @@ commitment_treasury:
   excel_rows:
   - '5'
   - '2000'
-  table_name: deals
+  file_format: excel
+  table_name: commitment_treasury
   work_sheet: Scroller
 deals:
+  budget_year: ''
   columns:
     INN:
       SQL: true
@@ -359,9 +364,11 @@ deals:
   excel_rows:
   - '81'
   - '303'
+  file_format: excel
   table_name: deals
   work_sheet: "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u044B"
 payments_full:
+  budget_year: ''
   columns:
     CSR:
       SQL: true
@@ -508,9 +515,11 @@ payments_full:
   excel_rows:
   - '7'
   - '916'
+  file_format: excel
   table_name: payments_full
   work_sheet: TDSheet
 payments_short:
+  budget_year: ''
   columns:
     CSR:
       SQL: true
@@ -657,9 +666,66 @@ payments_short:
   excel_rows:
   - '7'
   - '696'
+  file_format: excel
   table_name: payments_short
   work_sheet: TDSheet
+plan:
+  base_tag: '{http://zakupki.gov.ru/oos/TPtypes/1}position'
+  budget_year: .//{http://zakupki.gov.ru/oos/TPtypes/1}planYear
+  columns:
+    IKZ:
+      SQL: true
+      format: text PRIMARY KEY
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}IKZ
+    OKPD:
+      SQL: true
+      format: text
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/base/1}OKPDCode
+    amount:
+      SQL: true
+      format: numeric
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}currentYear
+    amount_next_year:
+      SQL: true
+      format: numeric
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}firstYear
+    budget_year:
+      SQL: true
+      format: numeric
+      xml:
+      - null
+      - .//{http://zakupki.gov.ru/oos/base/1}OKPDCode
+    publish_year:
+      SQL: true
+      format: numeric
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}publishYear
+    state_register_number:
+      SQL: true
+      format: text
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}purchaseNumber
+    subject:
+      SQL: true
+      format: text
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}purchaseObjectInfo
+  file_format: xml
+  table_name: plan
+  xml_file: external_data_source/result.xml
 purchases:
+  budget_year: ''
   columns:
     OKPD:
       SQL: true
@@ -714,12 +780,6 @@ purchases:
   excel_rows:
   - '22'
   - '206'
+  file_format: excel
   table_name: purchases
   work_sheet: Page 1
-tables:
-- deals
-- purchases
-- budget_commitment
-- payments_short
-- payments_full
-- commitment_treasury

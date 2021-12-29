@@ -55,6 +55,7 @@ class Cleaner(object):
         Returns:
             str:  data format for the corresponding column.
         """
+        print(column)
         format = self.columns[column]['format'].split(' ')
         return format[0]
 
@@ -160,6 +161,7 @@ class PandasFormat(Cleaner):
     def __init__(self, table_name = None, frame=None):
         super().__init__(table_name)
         self.frame = frame
+        self.column = None
         self.function_dict = {
             'boolean' : self._to_bool,
             'date' : self._to_date,
@@ -178,8 +180,8 @@ class PandasFormat(Cleaner):
         logging.debug('start _to_int PandasForma')
         print('start _to_int PandasFormat')
         float_df = pd.DataFrame()
-        float_df[list(self.frame)[0]] = pd.to_numeric(
-            self.frame[list(self.frame)[0]],
+        float_df[self.column] = pd.to_numeric(
+            self.frame[self.column],
             errors='coerce'
         ).fillna(0)
         return float_df.astype('int')
@@ -188,8 +190,8 @@ class PandasFormat(Cleaner):
         logging.debug('start _to_float PandasFormat')
         print('start _to_float PandasFormat')
         float_df = pd.DataFrame()
-        float_df[list(self.frame)[0]] = pd.to_numeric(
-            self.frame[list(self.frame)[0]],
+        float_df[self.column] = pd.to_numeric(
+            self.frame[self.column],
             errors='coerce'
         ).fillna(0)
         return  float_df.astype('float')
@@ -198,8 +200,8 @@ class PandasFormat(Cleaner):
         logging.debug('start _to_date PandasFormat')
         print('start _to_date PandasFormat')
         date_df = pd.DataFrame()
-        date_df[list(self.frame)[0]] = pd.to_datetime(
-            self.frame[list(self.frame)[0]],
+        date_df[self.column] = pd.to_datetime(
+            self.frame[self.column],
             #ускоряет процедуру обработки
             #infer_datetime_format=True,
             errors='coerce',
@@ -212,13 +214,33 @@ class PandasFormat(Cleaner):
         print('start _to_bool PandasFormat')
         return self.frame.astype('boolean').fillna(False)
 
-    def format_corrector(self):
+    def format_corrector(self) -> pd.DataFrame:
+        """проверка сериас вызывает функцию соответствующую формату колонки
+        название колонки - первое значение в списке из фрейма
+        используется если на вход подается список значенией одной колонки
+        """
         logging.debug('start format_corrector')
+        self.column = list(self.frame)[0]
         return  self.function_dict[
             self.format(
-                list(self.frame)[0]
+                self.column
             )
         ]()
+
+    def big_frame_format_corrector(self, big_frame) -> pd.DataFrame:
+        """проверка фрейма из нескольких колонок
+        поочередно проверяем каждую
+        """
+        for column in big_frame.columns.values.tolist():
+            self.column = str(column)
+            self.frame = pd.DataFrame(
+                big_frame[self.column],
+                columns=[self.column],
+            )            
+            big_frame[self.column] = self.function_dict[
+                self.format(self.column)
+            ]()
+        return big_frame
 
 
 class ValueCleaner(Cleaner):
@@ -307,6 +329,7 @@ class StructureCleaner(Cleaner):
             'payments_short' : self._payments,
             'payments_full' : self._payments,
             'commitment_treasury' : self._commitment_treasury,
+            'plan' : self._plan,
         }
 
     def _deals(self) -> pd.DataFrame:
@@ -347,6 +370,14 @@ class StructureCleaner(Cleaner):
         ]
         return self.frame
 
+    def _plan(self) ->  pd.DataFrame:
+        """Correct the data structure of the "plan" table.
+
+        Returns:
+            pd.DataFrame: new DataFrame
+        """
+        return self.frame
+
     def _purchases(self) -> pd.DataFrame:
         """Correct the data structure of the "purchases" table.
 
@@ -380,11 +411,11 @@ class StructureCleaner(Cleaner):
 
         Returns:
             pd.DataFrame: new DataFrame
-        """  
-        # list of columns      
+        """
+        # list of columns
         for column in ['year', 'reg_number', 'reg_number_full']:
             clean_frame = pd.DataFrame()
-            # information is extracted line by line from the 
+            # information is extracted line by line from the
             # "contract_identificator" column
             for deal_object in self.frame['contract_identificator']:
                 clean_frame = clean_frame.append(
@@ -399,7 +430,7 @@ class StructureCleaner(Cleaner):
         self.frame.to_excel('ihj.xlsx')
         return self.frame
 
-    def find_reg_number(self, deal_object: str) -> Dict[str, Any]:        
+    def find_reg_number(self, deal_object: str) -> Dict[str, Any]:
         extra_dict: Dict[str, Any] = {
             'year' : '0',
             'reg_number' : 0,
@@ -411,7 +442,7 @@ class StructureCleaner(Cleaner):
         if work_len > 1:
             num_list = work_list[work_len-2].split(' ')
             num_len = len(num_list)
-            try:                
+            try:
                 extra_dict['year'] = str(int(work_list[work_len-1])+2000)
                 extra_dict['reg_number'] = int(num_list[num_len-1])
                 extra_dict['reg_number_full'] = str(

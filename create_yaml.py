@@ -9,19 +9,13 @@ config_file = {
 }
 # Declare a python object with data
 table = {
-    'tables' : [
-        'deals',
-        'purchases',
-        'budget_commitment',
-        'payments_short',
-        'payments_full',
-        'commitment_treasury',
-    ],
     'deals' : {
         'table_name' : 'deals',
+        'file_format':'excel',
         'work_sheet' : 'Договоры',
         'excel_file' : 'external_data_source/План-закупок 2021.xlsm',
         'excel_rows' : ['81', '303'],
+        'budget_year':'',
         'columns' : {
             'reg_number' : {
                 'format' : 'integer PRIMARY KEY',
@@ -43,7 +37,7 @@ table = {
                 'SQL' : True,
                 'excel' : [True, ['H81','H303'],],
             },
-            'INN' : {
+            'inn' : {
                 'format' : 'text',
                 'SQL' : True,
                 'excel' : [False, ['81','303'],],
@@ -58,7 +52,7 @@ table = {
                 'SQL' : True,
                 'excel' : [True, ['J81','J303'],],
             },
-            'KBK' : {
+            'kbk' : {
                 'format' : 'text',
                 'SQL' : True,
                 'excel' : [True, ['K81','K303'],],
@@ -117,9 +111,11 @@ table = {
     },
     'purchases' : {
         'table_name' : 'purchases',
+        'file_format':'excel',
         'work_sheet' : 'Page 1',
         'excel_file' : 'external_data_source/print form.xlsx',
         'excel_rows' : ['22', '206'],
+        'budget_year':'',
         'columns' : {
             'order_number' : {
                 'format' : 'text PRIMARY KEY',
@@ -160,12 +156,14 @@ table = {
     },
     'budget_commitment' : {
         'table_name' : 'budget_commitment',
+        'file_format':'excel',
         'work_sheet' : 'TDSheet',
         'excel_file' : 'external_data_source/Обязательства.xlsx',
         'excel_rows' : ['5', '168'],
+        'budget_year':'',
         'columns' : {
             'reg_number_full' : {
-                'format' : 'text PRIMARY KEY',                
+                'format' : 'text PRIMARY KEY',
                 'SQL' : True,
                 'excel' : [False, ['',''],],
             },
@@ -177,7 +175,7 @@ table = {
             'contract_identificator' : {
                 'format' : 'text',
                 'SQL' : True,
-                'excel' : [True, ['A5', 'A168'],],                
+                'excel' : [True, ['A5', 'A168'],],
             },
             'contract_date' : {
                 'format' : 'date',
@@ -248,9 +246,11 @@ table = {
     },
     'payments_short' : {
         'table_name' : 'payments_short',
+        'file_format':'excel',
         'work_sheet' : 'TDSheet',
         'excel_file' : 'external_data_source/ЗКРсокращенная.xlsx',
         'excel_rows' : ['7', '696'],
+        'budget_year':'',
         'columns' : {
             'order_number' : {
                 'format' : 'integer PRIMARY KEY',
@@ -356,9 +356,11 @@ table = {
     },
     'payments_full' : {
         'table_name' : 'payments_full',
+        'file_format':'excel',
         'work_sheet' : 'TDSheet',
         'excel_file' : 'external_data_source/ЗКРполная.xlsx',
         'excel_rows' : ['7', '916'],
+        'budget_year':'',
         'columns' : {
             'order_number' : {
                 'format' : 'integer PRIMARY KEY',
@@ -463,10 +465,12 @@ table = {
         },
     },
     'commitment_treasury' : {
-        'table_name' : 'deals',
+        'table_name' : 'commitment_treasury',
+        'file_format':'excel',
         'work_sheet' : 'Scroller',
         'excel_file' : 'external_data_source/Обязательства_ЭБ.xlsx',
         'excel_rows' : ['5', '2000'],
+        'budget_year':'',
         'columns' : {
             'status' : {
                 'format' : 'text',
@@ -537,7 +541,80 @@ table = {
                 'format' : 'text PRIMARY KEY',
                 'SQL' : True,
                 'excel' : [False, ['', ''],],
-            },           
+            },
+        },
+    },
+    'plan' : {
+        'table_name':'plan',
+        'file_format':'xml',
+        'xml_file':'external_data_source/result.xml',
+        'base_tag':'{http://zakupki.gov.ru/oos/TPtypes/1}position',
+        'budget_year':'.//{http://zakupki.gov.ru/oos/TPtypes/1}planYear',
+        'columns':{
+            'state_register_number':{
+                'format' : 'text',
+                'SQL' : True,
+                'xml' : [
+                    True,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}purchaseNumber',
+                ],
+            },
+            'IKZ':{
+                'format':'text PRIMARY KEY',
+                'SQL':True,
+                'xml':[
+                    True,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}IKZ',
+                ],
+            },
+            'subject':{
+                'format' : 'text',
+                'SQL' : True,
+                'xml' : [
+                    True,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}purchaseObjectInfo',
+                ],
+            },
+            'amount':{
+                'format' : 'numeric',
+                'SQL' : True,
+                'xml' : [
+                    True,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}currentYear',
+                ],
+            },
+            'amount_next_year':{
+                'format' : 'numeric',
+                'SQL' : True,
+                'xml' : [
+                    True,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}firstYear',
+                ],
+            },
+            'publish_year':{
+                'format' : 'numeric',
+                'SQL' : True,
+                'xml' : [
+                    True,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}publishYear',
+                ],
+            },
+            'OKPD':{
+                'format' : 'text',
+                'SQL' : True,
+                'xml' : [
+                    True,
+                    './/{http://zakupki.gov.ru/oos/base/1}OKPDCode',
+                ],
+            },
+            'budget_year':{
+                'format' : 'numeric',
+                'SQL' : True,
+                'xml' : [
+                    None,
+                    './/{http://zakupki.gov.ru/oos/base/1}OKPDCode',
+                ],
+            },
         },
     },
 }
