@@ -1,46 +1,59 @@
 DEBUG:root:table_admin0.0
 DEBUG:root:start table in DB cheker
 DEBUG:asyncio:Using proactor: IocpProactor
-DEBUG:root:start table creator function
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_float ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_float PandasFormat
+DEBUG:root:start _to_date ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_date PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_date ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_date PandasFormat
+DEBUG:root:start _to_bool ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_bool PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_int ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_int PandasForma
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat
+DEBUG:root:start _to_str ValueCleaner
 DEBUG:root:start PandasFormat
 DEBUG:root:start format_corrector
 DEBUG:root:start _to_str PandasFormat

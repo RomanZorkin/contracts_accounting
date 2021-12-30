@@ -320,7 +320,7 @@ class XmlReader(FrameHandler):
             data_list.append(data_dict)
         return data_list
 
-    def list_to_frame(self)  -> pd.DataFrame:       
+    def list_to_frame(self) -> pd.DataFrame:       
         return self.frame_corrector(
             cleaner.PandasFormat(
                 self.table_name,

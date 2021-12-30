@@ -14,7 +14,7 @@ with open(config_file) as fh:
 class Scheme(object):
     """Class docstring.
     
-    Ful class descriotion
+    Ful class description
 
     Args:
         table (str):
