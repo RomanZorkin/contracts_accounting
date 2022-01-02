@@ -8,7 +8,14 @@ import yaml
 
 config_file = Path('configuration/table.yaml')
 with open(config_file) as fh:
-    table_config = yaml.load(fh, Loader=yaml.FullLoader)
+    table_config = yaml.load(fh, Loader=yaml.FullLoader)  # noqa: S506
+
+
+BOOL_NAME = 'boolean'
+DATE_NAME = 'date'
+FLOAT_NAME = 'numeric'
+INT_NAME = 'integer'
+STR_NAME = 'text'
 
 
 class Cleaner(object):
@@ -89,11 +96,11 @@ class PandasCleaner(Cleaner):
         super().__init__(table_name)
         self.dict_for_clean: Dict[Any, Any] = dict_for_clean
         self.pandas_type: Dict[str, str] = {
-            'boolean': 'bool',
-            'date': 'datetime64[ns]',
-            'integer': 'int',
-            'numeric': 'float',
-            'text': 'str',
+            BOOL_NAME: 'bool',
+            DATE_NAME: 'datetime64[ns]',
+            INT_NAME: 'int',
+            FLOAT_NAME: 'float',
+            STR_NAME: 'str',
         }
 
 
@@ -135,11 +142,11 @@ class PandasToDict(PandasCleaner):
         """
         super().__init__(table_name, dict_for_clean)
         self.function_dict: Dict[str, Any] = {
-            'boolean': self._boolean_handler,
-            'date': self._date_handler,
-            'integer': self._integer_handler,
-            'numeric': self._numeric_handler,
-            'text': self._text_handler,
+            BOOL_NAME: self._boolean_handler,
+            DATE_NAME: self._date_handler,
+            INT_NAME: self._integer_handler,
+            FLOAT_NAME: self._numeric_handler,
+            STR_NAME: self._text_handler,
         }
 
     def clean_rows(self):
@@ -220,7 +227,7 @@ class PandasToDict(PandasCleaner):
                 and the column name
         """
         input_value = self.dict_for_clean[column_name]
-        if type(input_value) == int or type(input_value) == float:
+        if isinstance(input_value, (int, float)):
             self.dict_for_clean[column_name] = int(input_value)
         else:
             self._error_incident('_integer_handler')
@@ -237,7 +244,7 @@ class PandasToDict(PandasCleaner):
                 and the column name
         """
         input_value = self.dict_for_clean[column_name]
-        if type(input_value) == int or type(input_value) == float:
+        if isinstance(input_value, (int, float)):
             if pd.isnull(input_value):
                 self.dict_for_clean[column_name] = float(0)
             else:
@@ -262,7 +269,7 @@ class PandasToDict(PandasCleaner):
         )
 
     def _error_incident(self, text: str):
-        print('error in ', text)
+        logging.critical(f'PandasToDict_err {text}')
 
 
 class PandasFormat(Cleaner):
@@ -296,11 +303,11 @@ class PandasFormat(Cleaner):
         self.frame: pd.DataFrame = frame
         self.column: str = None
         self.function_dict: Dict[str, Any] = {
-            'boolean': self._to_bool,
-            'date': self._to_date,
-            'integer': self._to_int,
-            'numeric': self._to_float,
-            'text': self._to_str,
+            BOOL_NAME: self._to_bool,
+            DATE_NAME: self._to_date,
+            INT_NAME: self._to_int,
+            FLOAT_NAME: self._to_float,
+            STR_NAME: self._to_str,
         }
         logging.debug('start PandasFormat')
 
@@ -463,11 +470,11 @@ class ValueCleaner(Cleaner):
         self.list_to_clean: List[Any] = list_to_clean
         self.column: str = column
         self.function_dict: Dict[str, Any] = {
-            'boolean': self._boolean_handler,
-            'date': self._date_handler,
-            'integer': self._integer_handler,
-            'numeric': self._numeric_handler,
-            'text': self._text_handler,
+            BOOL_NAME: self._boolean_handler,
+            DATE_NAME: self._date_handler,
+            INT_NAME: self._integer_handler,
+            FLOAT_NAME: self._numeric_handler,
+            STR_NAME: self._text_handler,
         }
         self.true_list = [
             'да',
@@ -503,10 +510,10 @@ class ValueCleaner(Cleaner):
         new_list = []
         for position in self.list_to_clean:
             try:
-                position = int(position)
-            except:
-                position = 0
-            new_list.append(int(position))
+                pad = int(position)
+            except TypeError:
+                pad = 0
+            new_list.append(int(pad))
         self.list_to_clean = new_list
 
     def _numeric_handler(self) -> None:
@@ -515,10 +522,10 @@ class ValueCleaner(Cleaner):
         new_list = []
         for position in self.list_to_clean:
             try:
-                position = float(position)
-            except:
-                position = 0.0
-            new_list.append(float(position))
+                pad = float(position)
+            except TypeError:
+                pad = float(0)
+            new_list.append(float(pad))
         self.list_to_clean = new_list
 
     def _text_handler(self) -> None:
@@ -527,10 +534,10 @@ class ValueCleaner(Cleaner):
         new_list = []
         for position in self.list_to_clean:
             try:
-                position = str(position)
-            except:
-                position = ''
-            new_list.append(str(position))
+                pad = str(position)
+            except TypeError:
+                pad = ''
+            new_list.append(str(pad))
         self.list_to_clean = new_list
 
 
@@ -551,8 +558,8 @@ class StructureCleaner(Cleaner):
         """Init StructureCleaner class.
 
         Args:
-            table_name (str):
-            inframe (pd.DataFrame):
+            table_name (str): table name.
+            inframe (pd.DataFrame): frame wich we correct.
         """
         super().__init__(table_name)
         self.frame: pd.DataFrame = inframe
@@ -565,6 +572,19 @@ class StructureCleaner(Cleaner):
             'commitment_treasury': self._commitment_treasury,
             'plan': self._plan,
         }
+        self.reg_number_pattern = {
+            'year': '0',
+            'reg_number': 0,
+            'reg_number_full': '0/0',
+        }
+
+    def none_row_deleter(self) -> pd.DataFrame:
+        self.frame = self.frame[
+            ( self.frame.one > 0) | ( self.frame.two > 0) | ( self.frame.three > 0)  # noqa F821, WPS465
+        ]
+
+    def structure_corrector(self) -> pd.DataFrame:
+        return self.function_dict[self.table_name]()
 
     def _deals(self) -> pd.DataFrame:
         """Correct the data structure of the "deals" table.
@@ -605,7 +625,7 @@ class StructureCleaner(Cleaner):
         ]
         return self.frame
 
-    def _plan(self) ->  pd.DataFrame:
+    def _plan(self) -> pd.DataFrame:
         """Correct the data structure of the "plan" table.
 
         Returns:
@@ -624,10 +644,13 @@ class StructureCleaner(Cleaner):
         Returns:
             pd.DataFrame: new DataFrame
         """
+        short_num_start = 23
+        short_num_finish = 26
         print('start Structure corrector _purchases')
         clean_frame = pd.DataFrame()
         clean_frame['state_register_number'] = [
-            int(value[23:26:]) for value in self.frame['order_number']
+            int(order_number[short_num_start:short_num_finish:])
+            for order_number in self.frame['order_number']
         ]
         self.frame['state_register_number'] = PandasFormat(
             self.table_name,
@@ -648,14 +671,14 @@ class StructureCleaner(Cleaner):
             pd.DataFrame: new DataFrame
         """
         # list of columns
-        for column in ['year', 'reg_number', 'reg_number_full']:
+        for column in list(self.reg_number_pattern):
             clean_frame = pd.DataFrame()
             # information is extracted line by line from the
             # "contract_identificator" column
             for deal_object in self.frame['contract_identificator']:
                 clean_frame = clean_frame.append(
                     {
-                        column: self.find_reg_number(deal_object)[column],
+                        column: self._find_reg_number(deal_object)[column],
                     },
                     ignore_index=True,
                 )
@@ -666,40 +689,41 @@ class StructureCleaner(Cleaner):
         self.frame.to_excel('ihj.xlsx')
         return self.frame
 
-    def find_reg_number(self, deal_object: str) -> Dict[str, Any]:
-        extra_dict: Dict[str, Any] = {
-            'year': '0',
-            'reg_number': 0,
-            'reg_number_full': '0/0',
-        }
-        deal_object = deal_object.replace("'", "")
-        work_list = deal_object.split('/')
-        work_len = len(work_list)
+    def _find_reg_number(self, deal_object: str) -> Dict[str, (str, int)]:
+        deal_object = deal_object.replace("'", "")  # noqa: Q000
+        deal_object = deal_object.split('/')
+        work_len = len(deal_object)
         if work_len > 1:
-            num_list = work_list[work_len-2].split(' ')
-            num_len = len(num_list)
-            try:
-                extra_dict['year'] = str(int(work_list[work_len - 1]) + 2000)
-                extra_dict['reg_number'] = int(num_list[num_len - 1])
-                extra_dict['reg_number_full'] = str(
-                    '{0}/{1}'.format(
-                        extra_dict['reg_number'],
-                        int(extra_dict['year']) - 2000,
-                    )
+            num_list = deal_object[work_len - 2].split(' ')
+            try:  # noqa: WPS229
+                return self._reg_number_maker(
+                    self,
+                    deal_object,
+                    work_len,
+                    num_list,
                 )
-                return extra_dict
-            except:
-                # print(num_list)
-                print('!!!! !!!!\nDescription.corrector except incident\n!!!!!')
-                return extra_dict
-        else:
-            return extra_dict
+            except TypeError:
+                logging.critical('StructureCleaner find_reg_number incident')
+            return self.reg_number_pattern
+        return self.reg_number_pattern
 
-    def none_row_deleter(self) -> pd.DataFrame:
-        self.frame = self.frame[
-            # noqa: F821, WPS465
-            (frame.one > 0) | (frame.two > 0) | (frame.three > 0)
-        ]
-
-    def structure_corrector(self) -> pd.DataFrame:
-        return self.function_dict[self.table_name]()
+    def _reg_number_maker(
+        self,
+        deal_object: List[str],
+        work_len: int,
+        num_list: List[str],
+    ) -> Dict[str, Any]:
+        """Docstring."""
+        millennium = 2000
+        external_dict = {
+            'year': str(int(deal_object[work_len - 1]) + millennium),
+            'reg_number': int(num_list[len(num_list) - 1]),
+            'reg_number_full': None,
+        }
+        external_dict['reg_number_full'] = str(
+            '{0}/{1}'.format(
+                external_dict['reg_number'],
+                int(external_dict['year']) - millennium,
+            ),
+        )
+        return external_dict
