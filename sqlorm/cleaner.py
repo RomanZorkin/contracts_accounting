@@ -1,3 +1,5 @@
+"""Corrects the original data before writing them to a database or frame."""
+
 import datetime
 import logging
 from pathlib import Path
@@ -67,8 +69,11 @@ class Cleaner(object):
         Returns:
             str: PRIMARY KEY sql column name.
         """
-        for column in self.columns:
-            if len(self.format(column)) > 1:
+        for column in list(self.columns):
+            # it may seem that the object for checking the condition
+            # is similar to the result from the sel.format() method,
+            # but the result of the method is string and not a list
+            if len(self.columns[column]['format'].split(' ')) > 1:
                 return column
 
 
@@ -166,7 +171,8 @@ class PandasToDict(PandasCleaner):
                 continue
             # we call the corresponding function for each format,
             # to correct values
-            self.function_dict[self.format](column)
+            logging.debug(f'clean_rows in PandasToDict {column}')
+            self.function_dict[self.format(column)](column)
         return self.dict_for_clean
 
     def _boolean_handler(self, column_name: str):
@@ -181,7 +187,7 @@ class PandasToDict(PandasCleaner):
                 and the column name
         """
         if isinstance(self.dict_for_clean[column_name], bool):
-            pass
+            pass  # noqa: WPS420
         elif self.dict_for_clean[column_name] == 'да':
             self.dict_for_clean[column_name] = True
         else:
@@ -579,11 +585,20 @@ class StructureCleaner(Cleaner):
         }
 
     def none_row_deleter(self) -> pd.DataFrame:
+        """Method for deleting rows without useful information."""
         self.frame = self.frame[
             ( self.frame.one > 0) | ( self.frame.two > 0) | ( self.frame.three > 0)  # noqa F821, WPS465
         ]
 
     def structure_corrector(self) -> pd.DataFrame:
+        """A method to start structure correcting.
+
+        Each table has its own rules. We can form new records\
+        for new columns, or adjust existing values.
+
+        Returns:
+            pd.DataFrame: correct DataFrame.
+        """
         return self.function_dict[self.table_name]()
 
     def _deals(self) -> pd.DataFrame:
@@ -612,7 +627,7 @@ class StructureCleaner(Cleaner):
         Returns:
             pd.DataFrame: new DataFrame
         """
-        print('start Structure corrector _commitment_treasury')
+        logging.debug('start Structure corrector _commitment_treasury')
         clean_frame = pd.DataFrame()
         clean_frame[self.id_sql] = self.frame['doc_number'].astype(str)\
             + self.frame['doc_date'].astype(str)
@@ -646,7 +661,7 @@ class StructureCleaner(Cleaner):
         """
         short_num_start = 23
         short_num_finish = 26
-        print('start Structure corrector _purchases')
+        logging.debug('start Structure corrector _purchases')
         clean_frame = pd.DataFrame()
         clean_frame['state_register_number'] = [
             int(order_number[short_num_start:short_num_finish:])
@@ -671,6 +686,7 @@ class StructureCleaner(Cleaner):
             pd.DataFrame: new DataFrame
         """
         # list of columns
+        logging.debug('start _budget_commitment in StructureCleaner')
         for column in list(self.reg_number_pattern):
             clean_frame = pd.DataFrame()
             # information is extracted line by line from the
@@ -689,22 +705,43 @@ class StructureCleaner(Cleaner):
         self.frame.to_excel('ihj.xlsx')
         return self.frame
 
-    def _find_reg_number(self, deal_object: str) -> Dict[str, (str, int)]:
-        deal_object = deal_object.replace("'", "")  # noqa: Q000
-        deal_object = deal_object.split('/')
+    def _find_reg_number(self, deal_object: str) -> Dict[str, Any]:
+        """Methods forms reg number information.
+
+        Method forms dictionary with a set of values associated with the
+        registration number of the contract:
+        - Year of registration;
+        - short registration number of the contract;
+        - full registration number of the contract.
+        For example, the contract registration number is 4/21, the data will
+        be transferred to the dictionary:
+        {'year': '2021', 'reg_number': 4, 'reg_number_full': '4/21'}.
+        If there are some errors methods return default
+        self.reg_number_pattern dict.
+
+        Arguments:
+            deal_object (str): record from 'contract_identificator' column
+
+        Returns:
+            Dict[str, Any]: dictionary with data for filling columns:\
+                'year', 'reg_number', 'reg_number_full'.
+        """
+        deal_object = deal_object.replace(
+            "'",
+            "",  # noqa: Q000
+        ).split(' ')[-1].split('/')
         work_len = len(deal_object)
         if work_len > 1:
             num_list = deal_object[work_len - 2].split(' ')
             try:  # noqa: WPS229
                 return self._reg_number_maker(
-                    self,
                     deal_object,
                     work_len,
                     num_list,
                 )
             except TypeError:
                 logging.critical('StructureCleaner find_reg_number incident')
-            return self.reg_number_pattern
+                return self.reg_number_pattern
         return self.reg_number_pattern
 
     def _reg_number_maker(
@@ -713,11 +750,31 @@ class StructureCleaner(Cleaner):
         work_len: int,
         num_list: List[str],
     ) -> Dict[str, Any]:
-        """Docstring."""
+        """Methods forms reg number information.
+
+        Method forms dictionary with a set of values associated with the
+        registration number of the contract:
+        - Year of registration;
+        - short registration number of the contract;
+        - full registration number of the contract.
+        For example, the contract registration number is 4/21, the data will
+        be transferred to the dictionary:
+        {'year': '2021', 'reg_number': 4, 'reg_number_full': '4/21'}.
+
+        Arguments:
+            deal_object (List[str]): a list with two values: reg.contract\
+                number and year of its registration
+            work_len (int): len of deal_object list
+            num_list (List[str]): reg_number
+
+        Returns:
+            Dict[str, Any]: dictionary with data for filling columns:\
+                'year', 'reg_number', 'reg_number_full'.
+        """
         millennium = 2000
         external_dict = {
             'year': str(int(deal_object[work_len - 1]) + millennium),
-            'reg_number': int(num_list[len(num_list) - 1]),
+            'reg_number': int(num_list[-1]),
             'reg_number_full': None,
         }
         external_dict['reg_number_full'] = str(
