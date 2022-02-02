@@ -1,0 +1,11 @@
+from sqlalchemy import ForeignKey, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text, Date, Float, Boolean
+from sqlalchemy.orm import relationship, sessionmaker
+
+import configparser
+from pathlib import Path
+
+
+engine = create_engine('postgresql://owner:1111@localhost:5432/contracts', echo=True)
+Base = declarative_base()

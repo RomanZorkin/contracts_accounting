@@ -12,9 +12,10 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    query_sd = main.filter_query(item_id)
+@app.get("/items/")
+def read_item(num: str):  
+    #reg_num = f'{item_id}/{str(year)[2:4]}'  
+    query_sd = main.filter_query(num)
     #print('query', query_sd)
     return query_sd
 

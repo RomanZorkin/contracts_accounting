@@ -84,7 +84,7 @@ class DBTable(object):
         print('start one_column_read')
         conn = await asyncpg.connect(connection_rule)
         sql_query = await query_builder.all_column_query_builder(self.table_name, column)
-        print(sql_query)
+        #print(sql_query)
         rows = await conn.fetch(sql_query)
         await conn.close()
         return [value[0] for value in rows]

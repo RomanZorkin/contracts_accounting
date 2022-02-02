@@ -19,9 +19,11 @@
     </tr> <!--ряд с ячейками заголовков-->
     {% for row in table1 %}
         <tr>
+            
             <td align='center'>
-                <a href="{% url 'deal' %}?num={{ row.reg_number }}">{{ row.reg_number }}</a>
+                <a href="{% url 'deal' %}?num={{ row.reg_number_full }}">{{ row.reg_number_full }}</a>
             </td>
+            <td>{{ row.reg_number }}</td>
             <td>{{ row.subject }}</td>
             <td>{{ row.partner }}</td>
             <td>{{ row.amount }}</td>

@@ -8,6 +8,7 @@ budget_commitment:
       - - L5
         - L168
       format: numeric
+      links: []
     advance_value:
       SQL: true
       excel:
@@ -15,6 +16,7 @@ budget_commitment:
       - - K5
         - K168
       format: numeric
+      links: []
     amount:
       SQL: true
       excel:
@@ -22,6 +24,7 @@ budget_commitment:
       - - J5
         - J168
       format: numeric
+      links: []
     commitment_date:
       SQL: true
       excel:
@@ -29,6 +32,7 @@ budget_commitment:
       - - ''
         - ''
       format: date
+      links: []
     commitment_number:
       SQL: true
       excel:
@@ -36,6 +40,7 @@ budget_commitment:
       - - H5
         - H168
       format: text
+      links: []
     contract_date:
       SQL: true
       excel:
@@ -43,6 +48,7 @@ budget_commitment:
       - - B5
         - B168
       format: date
+      links: []
     contract_identificator:
       SQL: true
       excel:
@@ -50,6 +56,7 @@ budget_commitment:
       - - A5
         - A168
       format: text
+      links: []
     contract_number:
       SQL: true
       excel:
@@ -57,6 +64,7 @@ budget_commitment:
       - - C5
         - C168
       format: text
+      links: []
     execution_date:
       SQL: true
       excel:
@@ -64,6 +72,7 @@ budget_commitment:
       - - I5
         - I168
       format: date
+      links: []
     notification_amount:
       SQL: true
       excel:
@@ -71,6 +80,7 @@ budget_commitment:
       - - G5
         - G168
       format: numeric
+      links: []
     notification_date:
       SQL: true
       excel:
@@ -78,6 +88,7 @@ budget_commitment:
       - - F5
         - F168
       format: date
+      links: []
     notification_number:
       SQL: true
       excel:
@@ -85,6 +96,7 @@ budget_commitment:
       - - E5
         - E168
       format: text
+      links: []
     reg_number:
       SQL: true
       excel:
@@ -92,6 +104,7 @@ budget_commitment:
       - - ''
         - ''
       format: integer
+      links: []
     reg_number_full:
       SQL: true
       excel:
@@ -99,6 +112,7 @@ budget_commitment:
       - - ''
         - ''
       format: text PRIMARY KEY
+      links: []
     subject:
       SQL: true
       excel:
@@ -106,6 +120,7 @@ budget_commitment:
       - - D5
         - D168
       format: text
+      links: []
     year:
       SQL: true
       excel:
@@ -113,12 +128,13 @@ budget_commitment:
       - - ''
         - ''
       format: text
-  excel_file: "external_data_source/\u041E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\
-    \u044C\u0441\u0442\u0432\u0430.xlsx"
+      links: []
   excel_rows:
   - '5'
   - '168'
   file_format: excel
+  file_path: "external_data_source/\u041E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\
+    \u044C\u0441\u0442\u0432\u0430.xlsx"
   table_name: budget_commitment
   work_sheet: TDSheet
 commitment_treasury:
@@ -131,6 +147,7 @@ commitment_treasury:
       - - N5
         - N2000
       format: numeric
+      links: []
     basic_doc_name:
       SQL: true
       excel:
@@ -138,6 +155,7 @@ commitment_treasury:
       - - K5
         - K2000
       format: text
+      links: []
     basic_doc_number:
       SQL: true
       excel:
@@ -145,6 +163,7 @@ commitment_treasury:
       - - L5
         - L2000
       format: text
+      links: []
     change_number:
       SQL: true
       excel:
@@ -152,6 +171,7 @@ commitment_treasury:
       - - H5
         - H2000
       format: integer
+      links: []
     commitment_date:
       SQL: true
       excel:
@@ -159,6 +179,7 @@ commitment_treasury:
       - - V5
         - V2000
       format: date
+      links: []
     commitment_number:
       SQL: true
       excel:
@@ -166,6 +187,7 @@ commitment_treasury:
       - - P5
         - P2000
       format: text
+      links: []
     doc_date:
       SQL: true
       excel:
@@ -173,6 +195,7 @@ commitment_treasury:
       - - G5
         - G2000
       format: date
+      links: []
     doc_number:
       SQL: true
       excel:
@@ -180,6 +203,7 @@ commitment_treasury:
       - - F5
         - F2000
       format: text
+      links: []
     execution_date:
       SQL: true
       excel:
@@ -187,6 +211,7 @@ commitment_treasury:
       - - M5
         - M2000
       format: date
+      links: []
     index:
       SQL: true
       excel:
@@ -194,6 +219,7 @@ commitment_treasury:
       - - ''
         - ''
       format: text PRIMARY KEY
+      links: []
     registration_date:
       SQL: true
       excel:
@@ -201,6 +227,7 @@ commitment_treasury:
       - - T5
         - T2000
       format: date
+      links: []
     status:
       SQL: true
       excel:
@@ -208,6 +235,7 @@ commitment_treasury:
       - - E5
         - E2000
       format: text
+      links: []
     subject:
       SQL: true
       excel:
@@ -215,6 +243,7 @@ commitment_treasury:
       - - S5
         - S2000
       format: text
+      links: []
     type:
       SQL: true
       excel:
@@ -222,31 +251,18 @@ commitment_treasury:
       - - I5
         - I2000
       format: text
-  excel_file: "external_data_source/\u041E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\
-    \u044C\u0441\u0442\u0432\u0430_\u042D\u0411.xlsx"
+      links: []
   excel_rows:
   - '5'
   - '2000'
   file_format: excel
+  file_path: "external_data_source/\u041E\u0431\u044F\u0437\u0430\u0442\u0435\u043B\
+    \u044C\u0441\u0442\u0432\u0430_\u042D\u0411.xlsx"
   table_name: commitment_treasury
   work_sheet: Scroller
 deals:
   budget_year: ''
   columns:
-    INN:
-      SQL: true
-      excel:
-      - false
-      - - '81'
-        - '303'
-      format: text
-    KBK:
-      SQL: true
-      excel:
-      - true
-      - - K81
-        - K303
-      format: text
     amount:
       SQL: true
       excel:
@@ -254,20 +270,31 @@ deals:
       - - N81
         - N303
       format: numeric
-    budget_commitment:
+      links: []
+    budget_year:
+      SQL: true
+      excel:
+      - false
+      - - '81'
+        - '303'
+      format: integer
+      links: []
+    change_number:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    commitment_number:
       SQL: true
       excel:
       - false
       - - '81'
         - '303'
       format: text
-    buget_year:
-      SQL: true
-      excel:
-      - false
-      - - '81'
-        - '303'
-      format: text
+      links: []
     contract_date:
       SQL: true
       excel:
@@ -275,6 +302,7 @@ deals:
       - - I81
         - I303
       format: date
+      links: []
     contract_number:
       SQL: true
       excel:
@@ -282,6 +310,7 @@ deals:
       - - C81
         - C303
       format: text
+      links: []
     detalisation:
       SQL: true
       excel:
@@ -289,6 +318,9 @@ deals:
       - - M81
         - M303
       format: text
+      links:
+      - payments_full
+      - payments_short
     execution_date:
       SQL: true
       excel:
@@ -296,6 +328,34 @@ deals:
       - - S81
         - S303
       format: date
+      links: []
+    ikz:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links:
+      - plan
+    inn:
+      SQL: true
+      excel:
+      - false
+      - - '81'
+        - '303'
+      format: text
+      links:
+      - payments_full
+      - payments_short
+    kbk:
+      SQL: true
+      excel:
+      - true
+      - - K81
+        - K303
+      format: text
+      links: []
     mark_perfomance:
       SQL: true
       excel:
@@ -303,6 +363,15 @@ deals:
       - - Q81
         - Q303
       format: boolean
+      links: []
+    paid_for:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: numeric
+      links: []
     partner:
       SQL: true
       excel:
@@ -310,6 +379,7 @@ deals:
       - - H81
         - H303
       format: text
+      links: []
     period:
       SQL: true
       excel:
@@ -317,6 +387,7 @@ deals:
       - - L81
         - L303
       format: text
+      links: []
     purchase_procedure:
       SQL: true
       excel:
@@ -324,13 +395,27 @@ deals:
       - - O81
         - O303
       format: text
+      links: []
     reg_number:
       SQL: true
       excel:
       - true
       - - B81
         - B303
-      format: integer PRIMARY KEY
+      format: integer
+      links: []
+    reg_number_full:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text PRIMARY KEY
+      links:
+      - budget_commitment
+      - payments_full
+      - payments_short
+      - budget_commitment
     responsible:
       SQL: true
       excel:
@@ -338,6 +423,7 @@ deals:
       - - P81
         - P303
       format: text
+      links: []
     state_register_number:
       SQL: true
       excel:
@@ -345,6 +431,8 @@ deals:
       - - J81
         - J303
       format: text
+      links:
+      - plan
     subject:
       SQL: true
       excel:
@@ -352,6 +440,7 @@ deals:
       - - D81
         - D303
       format: text
+      links: []
     total_amount:
       SQL: true
       excel:
@@ -359,80 +448,238 @@ deals:
       - - '81'
         - '303'
       format: numeric
-  excel_file: "external_data_source/\u041F\u043B\u0430\u043D-\u0437\u0430\u043A\u0443\
-    \u043F\u043E\u043A 2021.xlsm"
+      links: []
   excel_rows:
   - '81'
   - '303'
   file_format: excel
+  file_path: "external_data_source/\u041F\u043B\u0430\u043D-\u0437\u0430\u043A\u0443\
+    \u043F\u043E\u043A .xlsm"
   table_name: deals
   work_sheet: "\u0414\u043E\u0433\u043E\u0432\u043E\u0440\u044B"
+internal_plan:
+  budget_year: ''
+  columns:
+    amount:
+      SQL: true
+      format: numeric
+      links: []
+      word:
+      - true
+      - - "2022 \u0426\u041A"
+    amount_new:
+      SQL: true
+      format: numeric
+      links: []
+      word:
+      - true
+      - - "\u041D\u041C\u0426\u041A \u043D\u043E\u0432"
+    amount_old:
+      SQL: true
+      format: numeric
+      links: []
+      word:
+      - true
+      - - "\u041D\u041C\u0426\u041A \u0441\u0442"
+    contract_number:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u2116 \u043A\u043E\u043D\u0442\u0440\u0430\u043A\u0442\u0430"
+    contract_year:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u0433\u043E\u0434 \u043D\u0430\u0447."
+    detalisation:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - false
+      - - ''
+    execution_date:
+      SQL: true
+      format: date
+      links: []
+      word:
+      - true
+      - - "\u043F\u043E\u0441\u0442\u0430\u0432\u043A\u0430"
+    ikz:
+      SQL: true
+      format: text PRIMARY KEY
+      links: []
+      word:
+      - true
+      - - "\u0418\u041A\u0417"
+    kbk:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - false
+      - - ''
+    law:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u041D\u041F\u0410"
+    limitations:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u043E\u0433\u0440\u0430\u043D\u0438\u0447\u0435\u043D."
+    method:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u0421\u043F\u043E\u0441\u043E\u0431"
+    next_next_year:
+      SQL: true
+      format: numeric
+      links: []
+      word:
+      - true
+      - - '2024'
+    next_year:
+      SQL: true
+      format: numeric
+      links: []
+      word:
+      - true
+      - - '2023'
+    number:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u2116"
+    okpd:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u041E\u041A\u041F\u0414"
+    partner:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u0418\u0441\u043F\u043E\u043B\u043D\u0438\u0442\u0435\u043B\u044C"
+    responsible:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u041E\u0442\u0432\u0435\u0442\u0441\u0442"
+    status:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u0421\u0442\u0430\u0434\u0438\u044F"
+    subject:
+      SQL: true
+      format: text
+      links: []
+      word:
+      - true
+      - - "\u041D\u0430\u0438\u043C\u0435\u043D\u043E\u0432\u0430\u043D\u0438\u0435\
+          \ \u0437\u0430\u043A\u0443\u043F\u043A\u0438"
+  file_format: docx
+  file_path: "external_data_source/\u041B\u0435\u0433\u0435\u043D\u0434\u0430\u0440\
+    \u043D\u0430\u044F \u0442\u0430\u0431\u043B\u0438\u0446\u0430 .docx"
+  table_name: internal_plan
 payments_full:
   budget_year: ''
   columns:
-    CSR:
-      SQL: true
-      excel:
-      - true
-      - - G7
-        - G916
-      format: text
-    INN:
-      SQL: true
-      excel:
-      - false
-      - - ''
-        - ''
-      format: text
-    KBK:
-      SQL: true
-      excel:
-      - false
-      - - ''
-        - ''
-      format: text
-    KOSGU:
-      SQL: true
-      excel:
-      - true
-      - - H7
-        - H916
-      format: text
     amount:
       SQL: true
       excel:
       - true
       - - Q7
-        - Q916
+        - Q1372
       format: numeric
+      links: []
     contract_identificator:
       SQL: true
       excel:
       - true
       - - I7
-        - I916
+        - I1372
       format: text
-    detalization:
+      links: []
+    csr:
+      SQL: true
+      excel:
+      - true
+      - - G7
+        - G1372
+      format: text
+      links: []
+    detalisation:
       SQL: true
       excel:
       - true
       - - F7
-        - F916
+        - F1372
       format: text
+      links: []
+    inn:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    kbk:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    kosgu:
+      SQL: true
+      excel:
+      - true
+      - - H7
+        - H1372
+      format: text
+      links: []
     order_date:
       SQL: true
       excel:
       - true
       - - C7
-        - C916
+        - C1372
       format: date
+      links: []
     order_number:
       SQL: true
       excel:
       - true
       - - A7
-        - A916
-      format: integer PRIMARY KEY
+        - A1372
+      format: text PRIMARY KEY
+      links: []
     partner:
       SQL: true
       excel:
@@ -440,48 +687,55 @@ payments_full:
       - - ''
         - ''
       format: text
-    partner_INN:
+      links: []
+    partner_inn:
       SQL: true
       excel:
       - true
       - - J7
-        - J916
+        - J1372
       format: text
+      links: []
     payment_order_date:
       SQL: true
       excel:
       - true
       - - K7
-        - K916
+        - K1372
       format: date
+      links: []
     payment_order_number:
       SQL: true
       excel:
       - true
       - - L7
-        - L916
+        - L1372
       format: integer
+      links: []
     primary_doc_date:
       SQL: true
       excel:
       - true
       - - M7
-        - M916
+        - M1372
       format: date
+      links: []
     primary_doc_form:
       SQL: true
       excel:
       - true
       - - O7
-        - O916
+        - O1372
       format: text
+      links: []
     primary_doc_number:
       SQL: true
       excel:
       - true
       - - N7
-        - N916
+        - N1372
       format: text
+      links: []
     reg_number:
       SQL: true
       excel:
@@ -489,20 +743,23 @@ payments_full:
       - - ''
         - ''
       format: integer
+      links: []
     reg_number_full:
       SQL: true
       excel:
       - false
       - - I7
-        - I916
+        - I1372
       format: text
+      links: []
     subjekt:
       SQL: true
       excel:
       - true
       - - D7
-        - D916
+        - D1372
       format: text
+      links: []
     year:
       SQL: true
       excel:
@@ -510,80 +767,90 @@ payments_full:
       - - ''
         - ''
       format: text
-  excel_file: "external_data_source/\u0417\u041A\u0420\u043F\u043E\u043B\u043D\u0430\
-    \u044F.xlsx"
+      links: []
   excel_rows:
   - '7'
   - '916'
   file_format: excel
+  file_path: "external_data_source/\u0417\u041A\u0420\u043F\u043E\u043B\u043D\u0430\
+    \u044F.xlsx"
   table_name: payments_full
   work_sheet: TDSheet
 payments_short:
   budget_year: ''
   columns:
-    CSR:
-      SQL: true
-      excel:
-      - true
-      - - G7
-        - G696
-      format: text
-    INN:
-      SQL: true
-      excel:
-      - false
-      - - ''
-        - ''
-      format: text
-    KBK:
-      SQL: true
-      excel:
-      - false
-      - - ''
-        - ''
-      format: text
-    KOSGU:
-      SQL: true
-      excel:
-      - true
-      - - H7
-        - H696
-      format: text
     amount:
       SQL: true
       excel:
       - true
       - - Q7
-        - Q696
+        - Q1070
       format: numeric
+      links: []
     contract_identificator:
       SQL: true
       excel:
       - true
       - - I7
-        - I696
+        - I1070
       format: text
-    detalization:
+      links: []
+    csr:
+      SQL: true
+      excel:
+      - true
+      - - G7
+        - G1070
+      format: text
+      links: []
+    detalisation:
       SQL: true
       excel:
       - true
       - - F7
-        - F696
+        - F1070
       format: text
+      links: []
+    inn:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    kbk:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    kosgu:
+      SQL: true
+      excel:
+      - true
+      - - H7
+        - H1070
+      format: text
+      links: []
     order_date:
       SQL: true
       excel:
       - true
       - - C7
-        - C696
+        - C1070
       format: date
+      links: []
     order_number:
       SQL: true
       excel:
       - true
       - - A7
-        - A696
-      format: integer PRIMARY KEY
+        - A1070
+      format: text PRIMARY KEY
+      links: []
     partner:
       SQL: true
       excel:
@@ -591,48 +858,55 @@ payments_short:
       - - ''
         - ''
       format: text
-    partner_INN:
+      links: []
+    partner_inn:
       SQL: true
       excel:
       - true
       - - J7
-        - J696
+        - J1070
       format: text
+      links: []
     payment_order_date:
       SQL: true
       excel:
       - true
       - - K7
-        - K696
+        - K1070
       format: date
+      links: []
     payment_order_number:
       SQL: true
       excel:
       - true
       - - L7
-        - L696
+        - L1070
       format: integer
+      links: []
     primary_doc_date:
       SQL: true
       excel:
       - true
       - - M7
-        - M696
+        - M1070
       format: date
+      links: []
     primary_doc_form:
       SQL: true
       excel:
       - true
       - - O7
-        - O696
+        - O1070
       format: text
+      links: []
     primary_doc_number:
       SQL: true
       excel:
       - true
       - - N7
-        - N696
+        - N1070
       format: text
+      links: []
     reg_number:
       SQL: true
       excel:
@@ -640,100 +914,105 @@ payments_short:
       - - ''
         - ''
       format: integer
+      links: []
     reg_number_full:
       SQL: true
       excel:
       - false
       - - I7
-        - I696
+        - I1070
       format: text
+      links: []
     subjekt:
       SQL: true
       excel:
       - true
       - - D7
-        - D696
+        - D1070
       format: text
+      links: []
     year:
       SQL: true
       excel:
       - false
       - - ''
         - ''
-      format: text
-  excel_file: "external_data_source/\u0417\u041A\u0420\u0441\u043E\u043A\u0440\u0430\
-    \u0449\u0435\u043D\u043D\u0430\u044F.xlsx"
+      format: integer
+      links: []
   excel_rows:
   - '7'
   - '696'
   file_format: excel
+  file_path: "external_data_source/\u0417\u041A\u0420\u0441\u043E\u043A\u0440\u0430\
+    \u0449\u0435\u043D\u043D\u0430\u044F.xlsx"
   table_name: payments_short
   work_sheet: TDSheet
 plan:
   base_tag: '{http://zakupki.gov.ru/oos/TPtypes/1}position'
   budget_year: .//{http://zakupki.gov.ru/oos/TPtypes/1}planYear
   columns:
-    IKZ:
-      SQL: true
-      format: text PRIMARY KEY
-      xml:
-      - true
-      - .//{http://zakupki.gov.ru/oos/TPtypes/1}IKZ
-    OKPD:
-      SQL: true
-      format: text
-      xml:
-      - true
-      - .//{http://zakupki.gov.ru/oos/base/1}OKPDCode
     amount:
       SQL: true
       format: numeric
+      links: []
       xml:
       - true
       - .//{http://zakupki.gov.ru/oos/TPtypes/1}currentYear
     amount_next_year:
       SQL: true
       format: numeric
+      links: []
       xml:
       - true
       - .//{http://zakupki.gov.ru/oos/TPtypes/1}firstYear
     budget_year:
       SQL: true
       format: numeric
+      links: []
       xml:
       - null
+      - .//{http://zakupki.gov.ru/oos/base/1}OKPDCode
+    ikz:
+      SQL: true
+      format: text PRIMARY KEY
+      links: []
+      xml:
+      - true
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}IKZ
+    okpd:
+      SQL: true
+      format: text
+      links: []
+      xml:
+      - true
       - .//{http://zakupki.gov.ru/oos/base/1}OKPDCode
     publish_year:
       SQL: true
       format: numeric
+      links: []
       xml:
       - true
       - .//{http://zakupki.gov.ru/oos/TPtypes/1}publishYear
     state_register_number:
       SQL: true
       format: text
+      links: []
       xml:
       - true
       - .//{http://zakupki.gov.ru/oos/TPtypes/1}purchaseNumber
     subject:
       SQL: true
       format: text
+      links: []
       xml:
       - true
       - .//{http://zakupki.gov.ru/oos/TPtypes/1}purchaseObjectInfo
   file_format: xml
+  file_path: external_data_source/result.xml
   table_name: plan
-  xml_file: external_data_source/result.xml
 purchases:
   budget_year: ''
   columns:
-    OKPD:
-      SQL: true
-      excel:
-      - true
-      - - C22
-        - C206
-      format: text
     amount:
       SQL: true
       excel:
@@ -741,6 +1020,7 @@ purchases:
       - - J22
         - J206
       format: numeric
+      links: []
     budget_year:
       SQL: true
       excel:
@@ -748,6 +1028,15 @@ purchases:
       - - H22
         - H206
       format: text
+      links: []
+    okpd:
+      SQL: true
+      excel:
+      - true
+      - - C22
+        - C206
+      format: text
+      links: []
     order_number:
       SQL: true
       excel:
@@ -755,6 +1044,7 @@ purchases:
       - - B22
         - B206
       format: text PRIMARY KEY
+      links: []
     reg_number:
       SQL: true
       excel:
@@ -762,6 +1052,7 @@ purchases:
       - - ''
         - ''
       format: integer
+      links: []
     state_register_number:
       SQL: true
       excel:
@@ -769,6 +1060,7 @@ purchases:
       - - ''
         - ''
       format: integer
+      links: []
     subject:
       SQL: true
       excel:
@@ -776,10 +1068,11 @@ purchases:
       - - F22
         - F206
       format: text
-  excel_file: external_data_source/print form.xlsx
+      links: []
   excel_rows:
   - '22'
   - '206'
   file_format: excel
+  file_path: external_data_source/print form.xlsx
   table_name: purchases
   work_sheet: Page 1

@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, Dict, List
 
+import docx
 import openpyxl
 import pandas as pd
 import yaml
@@ -47,9 +48,12 @@ class Reader(object):
         sql_scheme: sql_admin.Scheme object. Required for\
             interaction with postgresql.
         budget_year (int): finance year.
+        input_file (Path): path to file. The path is determined by\
+            the configuration file "table.yaml". The internal\
+            directory is used - "external_data_source".
     """
 
-    def __init__(self, table: str):
+    def __init__(self, table: str, budget_year: Any = None):
         """Init Reader class.
 
         Args:
@@ -65,7 +69,8 @@ class Reader(object):
         self.columns: List[str] = list(self.columns_scheme)
         self.id_sql: str = self._sql_id()
         self.sql_scheme = sql_admin.Scheme(self.table_name)
-        self.budget_year: int = None
+        self.budget_year: int = budget_year
+        self.input_file: Path = self._make_path()
 
     def _sql_id(self) -> str:
         """Form name of PRIMARY KEY sql column.
@@ -77,6 +82,22 @@ class Reader(object):
             formating = self.columns_scheme[column]['format'].split(' ')
             if len(formating) > 1:
                 return column
+
+    def _make_path(self) -> Path:
+        """MAke path for file.
+
+        Method takes base adress from configuration fuile "table.yamle",
+        budget_year and extention. Return full path to file.
+
+        Returns:
+            Path: file adress.
+        """
+        if self.budget_year:
+            file_path = Path(self.table_scheme['file_path'])
+            return Path(file_path.parent, "{0}{1}{2}".format(
+                file_path.stem, self.budget_year, file_path.suffix
+            ))
+        return Path(self.table_scheme['file_path'])
 
 
 class FrameHandler(Reader):
@@ -103,6 +124,7 @@ class FrameHandler(Reader):
         return cleaner.StructureCleaner(
             table_name=self.table_name,
             inframe=frame,
+            budget_year=self.budget_year
         ).structure_corrector()
 
     def frame_to_dict(self, frame: pd.DataFrame) -> Dict[int, Dict[str, Any]]:
@@ -155,9 +177,6 @@ class ExcelReader(FrameHandler):
     transferred to the database for writing.
 
     Attributes:
-        excel_file (Path): path to excel file. The path is determined by\
-            the configuration file "table.yaml". The internal\
-            directory is used - "external_data_source".
         work_sheet (str): name excel workshit, where the\
             information is located.
         excel_rows (List[str]): the range of rows where\
@@ -170,20 +189,20 @@ class ExcelReader(FrameHandler):
         ws (openpyxl): openpyxl object - excel worksheet in workbook.
     """
 
-    def __init__(self, table: str):
+    def __init__(self, table: str, budget_year=None):
         """Init Reader class.
 
         Args:
             table (str): the name of the table for which we apply the
                 corresponding rules from configuration file "table.yaml".
         """
-        super().__init__(table)
-        self.excel_file: Path = Path(self.table_scheme['excel_file'])
+        super().__init__(table, budget_year)
+
         self._work_sheet: str = self.table_scheme['work_sheet']
         self.excel_rows: List[str] = self.table_scheme['excel_rows']
         self.excel_columns: List[str] = self._excel_columns()
         self.excel_cells: Dict[str, List[str]] = self._excel_cells()
-        self.wb_obj = openpyxl.load_workbook(self.excel_file)
+        self.wb_obj = openpyxl.load_workbook(self.input_file)
         self.ws = self.wb_obj[self._work_sheet]
 
     def read(self, column: str) -> List[Any]:
@@ -294,8 +313,7 @@ class XmlReader(FrameHandler):
                 corresponding rules from configuration file "table.yaml".
         """
         super().__init__(table)
-        self.xml_file: Path = Path(self.table_scheme['xml_file'])
-        self.xml_obj: ElementTree = ET.parse(self.xml_file).getroot()
+        self.xml_obj: ElementTree = ET.parse(self.input_file).getroot()
         self.base_tag = self.table_scheme['base_tag']
         self.budget_year = self.xml_obj.find(
             self.table_scheme['budget_year']
@@ -320,7 +338,7 @@ class XmlReader(FrameHandler):
             data_list.append(data_dict)
         return data_list
 
-    def list_to_frame(self) -> pd.DataFrame:       
+    def list_to_frame(self) -> pd.DataFrame:
         return self.frame_corrector(
             cleaner.PandasFormat(
                 self.table_name,
@@ -329,7 +347,7 @@ class XmlReader(FrameHandler):
 
     def xml_to_excel(self):
         self.list_to_frame().to_excel("tmp/output.xlsx")
-    
+
     def big_dict_to_sql(self, dict_to_sql: Dict[int, Dict[str, Any]]) -> None:
         """Start the procedure of writing to the database.
 
@@ -343,4 +361,80 @@ class XmlReader(FrameHandler):
         """Run a method to write data to the database."""
         self.big_dict_to_sql(self.frame_to_dict(self.list_to_frame()))
         logging.debug('finish file_reader.table_to_sql')
-        
+
+
+class WordReader(FrameHandler):
+    """
+    """
+    def __init__(self, table: str, budget_year=None):
+        """Init Reader class.
+
+        Args:
+            table (str): the name of the table for which we apply the
+                corresponding rules from configuration file "table.yaml".
+        """
+        super().__init__(table, budget_year)
+
+        self.word_doc = docx.Document(self.input_file)
+        self.word_table = self.word_doc.tables[0]
+        self.dict_for_frame = self._make_dict()
+        self.word_columns = list(self.dict_for_frame.keys())
+        self.names_dict = self._make_names_dict()
+        self.frame = self._make_word_frame()
+
+        print('hello',self.names_dict)
+
+    def big_dict_to_sql(self, dict_to_sql: Dict[int, Dict[str, Any]]) -> None:
+        """Start the procedure of writing to the database.
+
+        Args:
+            dict_to_sql ( Dict[int, Dict]): dictionary with data to write
+                to the database
+        """
+        self.sql_scheme.insert_big_data(dict_to_sql, self.id_sql)
+
+    def table_to_sql(self) -> None:
+        """Run a method to write data to the database."""
+        print(self.frame)
+        self.big_dict_to_sql(self.frame_to_dict(self.frame))
+        logging.debug('finish file_reader.table_to_sql')
+
+    def rename_frame(self, frame):
+        for word_name, sql_name in self.names_dict.items():
+            frame.rename(columns={word_name: sql_name}, inplace=True)
+        return frame
+
+    def _make_dict(self):
+        # make columns names dict stucture
+        return {
+            key.text: [] for key in self.word_table.row_cells(0)
+        }
+    def _make_word_frame(self):
+        number = 0
+        for column in self.word_table.columns:
+            row = 0
+            for cell in column.cells:
+                if row > 0:
+                    row_string = cell.text
+                    self.dict_for_frame[
+                        self.word_columns[number]
+                    ].append(cell.text)
+                row += 1
+            number += 1
+        frame = self.rename_frame(pd.DataFrame(self.dict_for_frame))
+        print(frame)
+        return cleaner.PandasFormat(self.table_name).big_frame_format_corrector(            
+            frame
+        )
+
+    def _make_names_dict(self):
+        print('start name dict')
+        names_dict = {}
+        for column in self.columns:
+            word_name = self.table_scheme['columns'][column]['word'][1]
+            if len(word_name) > 0:
+                names_dict[word_name[0]] = column
+        return names_dict
+
+
+
