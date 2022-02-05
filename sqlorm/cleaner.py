@@ -3,7 +3,7 @@
 import datetime
 import logging
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
 import yaml
@@ -13,7 +13,6 @@ import sqlorm.word_module as wm
 config_file = Path('configuration/table.yaml')
 with open(config_file) as fh:
     table_config = yaml.load(fh, Loader=yaml.FullLoader)  # noqa: S506
-
 
 BOOL_NAME = 'boolean'
 DATE_NAME = 'date'
@@ -138,9 +137,9 @@ class PandasToDict(PandasCleaner):
     """
 
     def __init__(
-        self,
-        table_name: str = None,
-        dict_for_clean: Dict[str, Any] = None,
+            self,
+            table_name: str = None,
+            dict_for_clean: Dict[str, Any] = None,
     ):
         """Init PandasToDict class.
 
@@ -305,7 +304,7 @@ class PandasFormat(Cleaner):
             are established
     """
 
-    def __init__(self, table_name: str = None, frame: pd.DataFrame = None):
+    def __init__(self, table_name: str = '', frame: pd.DataFrame = None):
         """Init PandasFormat class.
 
         Args:
@@ -316,7 +315,7 @@ class PandasFormat(Cleaner):
         """
         super().__init__(table_name)
         self.frame: pd.DataFrame = frame
-        self.column: str = None
+        self.column: str = ''
         self.function_dict: Dict[str, Any] = {
             BOOL_NAME: self._to_bool,
             DATE_NAME: self._to_date,
@@ -473,10 +472,10 @@ class ValueCleaner(Cleaner):
     """
 
     def __init__(
-        self,
-        list_to_clean: List[Any],
-        table_name: str,
-        column: str,
+            self,
+            list_to_clean: List[Any],
+            table_name: str,
+            column: str,
     ):
         """Init ValueCleaner class.
 
@@ -575,10 +574,10 @@ class StructureCleaner(Cleaner):
     """
 
     def __init__(
-        self,
-        table_name: str,
-        inframe: pd.DataFrame,
-        budget_year: Any,
+            self,
+            table_name: str,
+            inframe: pd.DataFrame,
+            budget_year: Any,
     ):
         """Init StructureCleaner class.
 
@@ -597,7 +596,7 @@ class StructureCleaner(Cleaner):
             'payments_full': self._payments,
             'commitment_treasury': self._commitment_treasury,
             'plan': self._plan,
-            'internal_plan': self._internal_plan
+            'internal_plan': self._internal_plan,
         }
         self.reg_number_pattern = {
             'year': '0',
@@ -608,8 +607,8 @@ class StructureCleaner(Cleaner):
     def none_row_deleter(self) -> pd.DataFrame:
         """Method for deleting rows without useful information."""
         self.frame = self.frame[
-            ( self.frame.one > 0) | ( self.frame.two > 0) | ( self.frame.three > 0)  # noqa F821, WPS465
-        ]
+            (self.frame.one > 0) | (self.frame.two > 0) | (self.frame.three > 0)  # noqa F821, WPS465
+            ]
 
     def structure_corrector(self) -> pd.DataFrame:
         """A method to start structure correcting.
@@ -624,10 +623,10 @@ class StructureCleaner(Cleaner):
 
     def _deals(self) -> pd.DataFrame:
         """Correct the data structure of the "deals" table.
-        
+
         Method create sql_id column as summ of "reg_number + / + two last
-        digits of budget year" and insert new column - budget year. 
-         
+        digits of budget year" and insert new column - budget year.
+
         Returns:
             pd.DataFrame: new DataFrame
         """
@@ -635,14 +634,14 @@ class StructureCleaner(Cleaner):
         clean_frame = pd.DataFrame()
 
         clean_frame['budget_year'] = [
-            self.budget_year
-        ]*len(self.frame['reg_number'])
-        
-        clean_frame['slash'] = ['/']*len(self.frame['reg_number'])
-        clean_frame['short_year'] = [self.budget_year-2000]*len(self.frame['reg_number'])
-        
-        clean_frame['reg_number_full'] = self.frame['reg_number'].astype(str)\
-            + clean_frame['slash'] + clean_frame['short_year'].astype(str)        
+                                         self.budget_year
+                                     ] * len(self.frame['reg_number'])
+
+        clean_frame['slash'] = ['/'] * len(self.frame['reg_number'])
+        clean_frame['short_year'] = [self.budget_year - 2000] * len(self.frame['reg_number'])
+
+        clean_frame['reg_number_full'] = self.frame['reg_number'].astype(str) \
+                                         + clean_frame['slash'] + clean_frame['short_year'].astype(str)
 
         self.frame['budget_year'] = PandasFormat(
             self.table_name,
@@ -679,13 +678,13 @@ class StructureCleaner(Cleaner):
                 self.table_name,
                 clean_frame,
             ).format_corrector()
-        #self.frame.to_excel('платеж из 1с.xlsx')
+        # self.frame.to_excel('платеж из 1с.xlsx')
         for i in range(len(self.frame)):
             self.frame['order_number'].iloc[i] = '{0}_{1}'.format(
                 self.frame['order_number'].iloc[i],
                 str(self.frame['order_date'].iloc[i]),
             )
-        #self.frame['order_number'] = self.frame['order_number'] + f'_{}'
+        # self.frame['order_number'] = self.frame['order_number'] + f'_{}'
         return self.frame
 
     def _commitment_treasury(self) -> pd.DataFrame:
@@ -700,15 +699,15 @@ class StructureCleaner(Cleaner):
         """
         logging.debug('start Structure corrector _commitment_treasury')
         clean_frame = pd.DataFrame()
-        clean_frame[self.id_sql] = self.frame['doc_number'].astype(str)\
-            + self.frame['doc_date'].astype(str)
+        clean_frame[self.id_sql] = self.frame['doc_number'].astype(str) \
+                                   + self.frame['doc_date'].astype(str)
         self.frame[self.id_sql] = PandasFormat(
             self.table_name,
             clean_frame,
         ).format_corrector()
         self.frame = self.frame[
             self.frame['status'] == 'Отражен на ЛС'
-        ]
+            ]
         return self.frame
 
     def _plan(self) -> pd.DataFrame:
@@ -721,8 +720,8 @@ class StructureCleaner(Cleaner):
         # форимровании IKZ в других таблицах там че попало, 
         # поэтому и там тоже обрезаем
         for row in self.frame['ikz']:
-            location = pd.Index(self.frame['ikz']).get_loc(row)           
-            self.frame['ikz'].iloc[location] = row[:26]            
+            location = pd.Index(self.frame['ikz']).get_loc(row)
+            self.frame['ikz'].iloc[location] = row[:26]
         return self.frame
 
     def _purchases(self) -> pd.DataFrame:
@@ -779,7 +778,7 @@ class StructureCleaner(Cleaner):
                 self.table_name,
                 clean_frame,
             ).format_corrector()
-        #self.frame.to_excel('договры из 1с.xlsx')
+        # self.frame.to_excel('договры из 1с.xlsx')
         return self.frame
 
     def _find_reg_number(self, deal_object: str) -> Dict[str, Any]:
@@ -803,16 +802,16 @@ class StructureCleaner(Cleaner):
             Dict[str, Any]: dictionary with data for filling columns:\
                 'year', 'reg_number', 'reg_number_full'.
         """
-        deal_object = deal_object.replace(
+        deal_object_list = deal_object.replace(
             "'",
             "",  # noqa: Q000
         ).split(' ')[-1].split('/')
-        work_len = len(deal_object)
+        work_len = len(deal_object_list)
         if work_len > 1:
-            num_list = deal_object[work_len - 2].split(' ')
+            num_list = deal_object_list[work_len - 2].split(' ')
             try:  # noqa: WPS229
                 return self._reg_number_maker(
-                    deal_object,
+                    deal_object_list,
                     work_len,
                     num_list,
                 )
@@ -822,10 +821,10 @@ class StructureCleaner(Cleaner):
         return self.reg_number_pattern
 
     def _reg_number_maker(
-        self,
-        deal_object: List[str],
-        work_len: int,
-        num_list: List[str],
+            self,
+            deal_object: List[str],
+            work_len: int,
+            num_list: List[str],
     ) -> Dict[str, Any]:
         """Methods forms reg number information.
 
@@ -861,9 +860,9 @@ class StructureCleaner(Cleaner):
             ),
         )
         return external_dict
-    
+
     def _internal_plan(self):
-        
+
         print('start_internal plan')
         names_dict = {}
         for column in self.columns:
@@ -874,7 +873,7 @@ class StructureCleaner(Cleaner):
         self.frame = wm.make_new_frame(self.frame, names_dict)
         numeric_columns = ['amount_new', 'amount']
         for column in numeric_columns:
-            self.frame[column]= pd.to_numeric(self.frame[column])
+            self.frame[column] = pd.to_numeric(self.frame[column])
         self.frame.to_excel('tmp/Закупки 2022.xlsx', index=False)
-        print(f'create file Закупки.xlsx') 
-        return self.frame   
+        print(f'create file Закупки.xlsx')
+        return self.frame

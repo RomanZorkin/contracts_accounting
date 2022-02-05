@@ -4,7 +4,7 @@ import logging
 import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import docx
 import openpyxl
@@ -53,7 +53,7 @@ class Reader(object):
             directory is used - "external_data_source".
     """
 
-    def __init__(self, table: str, budget_year: Any = None):
+    def __init__(self, table: str, budget_year: Optional['int'] = None):
         """Init Reader class.
 
         Args:
@@ -69,7 +69,7 @@ class Reader(object):
         self.columns: List[str] = list(self.columns_scheme)
         self.id_sql: str = self._sql_id()
         self.sql_scheme = sql_admin.Scheme(self.table_name)
-        self.budget_year: int = budget_year
+        self.budget_year: Optional['int'] = budget_year
         self.input_file: Path = self._make_path()
 
     def _sql_id(self) -> str:
@@ -313,7 +313,7 @@ class XmlReader(FrameHandler):
                 corresponding rules from configuration file "table.yaml".
         """
         super().__init__(table)
-        self.xml_obj: ElementTree = ET.parse(self.input_file).getroot()
+        self.xml_obj: xml.etree.ElementTree = ET.parse(self.input_file).getroot()
         self.base_tag = self.table_scheme['base_tag']
         self.budget_year = self.xml_obj.find(
             self.table_scheme['budget_year']
