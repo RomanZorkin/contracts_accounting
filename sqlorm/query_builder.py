@@ -46,12 +46,14 @@ async def insert_query_builder(insert_data, index):
         if counter == 1:
             table_name = value
             counter += 1
+        # значения для конца запроса, без запятой на конце
         elif counter == dict_length:
             columns = '{0}{1}\n'.format(columns, key)
             values = '{0}{1}\n'.format(values, value)
             update_data ='{}{}={}\n'.format(update_data, key, value)
             counter += 1
         else:
+            # значения с запятой на конце, для середины запроса
             columns = '{0}{1},\n'.format(columns, key)
             values = '{0}{1},\n'.format(values, value)
             update_data ='{}{}={},\n'.format(update_data, key, value)

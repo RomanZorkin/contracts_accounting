@@ -21,12 +21,16 @@ def value_in_list(kbk):
 def kbk_clean(kbk):
     """превращает кбк формата 20203069990092019214(225) унто ГОЗ
      в формат (20203069990092019214225, унто, ГОЗ)"""
-    kbk = kbk.replace('(', '').replace(')', '').split(' ')
+    kbk = kbk.replace('(', '').replace(')', '').split(' ')    
     if len(kbk) < 3:
         kbk.append('')
-    if kbk[2] in dfo:
+    kbk[1] = kbk[1].replace(',','')
+    kbk[2] = kbk[2].replace(',','')
+    if kbk[2].lower() in dfo:
+        print('correctirovka', kbk[1])
         kbk[1] = kbk[2]
-    return (kbk[0], kbk[1].lower(), kbk[2])
+    print('posle correctirovki', kbk[1], kbk[2])
+    return (kbk[0][:23], kbk[1].lower(), kbk[2])
 
 
 def find_kbk(frame):
@@ -58,8 +62,10 @@ def make_new_frame(frame, names_dict):
         print(kbk)
         #frame_dict[name]=[]
         for i in range(kbk[0], kbk[1]):
+            print(name[0], len(name[0]))
             frame['kbk'].iloc[i] = name[0]
-            frame['detalisation'].iloc[i] = name[1]
+            print('to grame', name[1])
+            frame['detalisation'].iloc[i] = name[1].replace(',','')
 
             if frame['ikz'].iloc[i] != '':
                 frame['ikz'].iloc[i] = frame['ikz'].iloc[i][:26]
