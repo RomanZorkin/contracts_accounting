@@ -263,6 +263,14 @@ commitment_treasury:
 deals:
   budget_year: ''
   columns:
+    additional_agreement:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
     amount:
       SQL: true
       excel:
@@ -278,14 +286,6 @@ deals:
       - - '81'
         - '303'
       format: integer
-      links: []
-    change_number:
-      SQL: true
-      excel:
-      - false
-      - - ''
-        - ''
-      format: text
       links: []
     commitment_number:
       SQL: true
@@ -309,6 +309,14 @@ deals:
       - true
       - - C81
         - C303
+      format: text
+      links: []
+    department:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
       format: text
       links: []
     detalisation:
@@ -368,8 +376,8 @@ deals:
       SQL: true
       excel:
       - false
-      - - ''
-        - ''
+      - - G81
+        - G303
       format: numeric
       links: []
     partner:
@@ -422,6 +430,14 @@ deals:
       - true
       - - P81
         - P303
+      format: text
+      links: []
+    scan_path:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
       format: text
       links: []
     state_register_number:
@@ -605,6 +621,104 @@ internal_plan:
   file_path: "external_data_source/\u041B\u0435\u0433\u0435\u043D\u0434\u0430\u0440\
     \u043D\u0430\u044F \u0442\u0430\u0431\u043B\u0438\u0446\u0430 .docx"
   table_name: internal_plan
+limits:
+  budget_year: ''
+  columns:
+    budget_year:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: integer
+      links: []
+    csr:
+      SQL: true
+      excel:
+      - true
+      - - D9
+        - D171
+      format: text
+      links: []
+    curent_limit:
+      SQL: true
+      excel:
+      - true
+      - - G9
+        - G171
+      format: numeric
+      links: []
+    detalisation:
+      SQL: true
+      excel:
+      - true
+      - - B9
+        - B171
+      format: text
+      links: []
+    download_date:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: date
+      links: []
+    head:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    kbk:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text
+      links: []
+    kbk_index:
+      SQL: true
+      excel:
+      - false
+      - - ''
+        - ''
+      format: text PRIMARY KEY
+      links: []
+    kosgu:
+      SQL: true
+      excel:
+      - true
+      - - F9
+        - F171
+      format: text
+      links: []
+    rpr:
+      SQL: true
+      excel:
+      - true
+      - - C9
+        - C171
+      format: text
+      links: []
+    vr:
+      SQL: true
+      excel:
+      - true
+      - - E9
+        - E171
+      format: text
+      links: []
+  excel_rows:
+  - '9'
+  - '171'
+  file_format: excel
+  file_path: external_data_source/OpDan .xlsx
+  table_name: limits
+  work_sheet: OpDan
 payments_full:
   budget_year: ''
   columns:

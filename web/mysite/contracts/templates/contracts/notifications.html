@@ -1,0 +1,26 @@
+<h1 align='center' style="color:rgb(240, 61, 16)">Опубликованные извещения войсковой части 68895</h1>
+
+<h2><a href="{% url 'index' %}">Главная</a></h2>
+
+<table border="1">
+    <tr>
+        <th>ИКЗ закупки</th>
+        <th>ИКЗ короткий</th>
+        <th>Сумма закупки</th>
+        <th>КБК</th>
+        <th>ДФО</th>
+        <th>Дата размещения извещения</th>
+        <th>КПедмет закупки</th>
+    </tr> <!--ряд с ячейками заголовков-->
+    {% for row in table %}
+        <tr>
+            <td align='center'>{{ row.ikz }}</td>
+            <td>{{ row.ikz_short }}</td>
+            <td>{{ row.amount }}</td>
+            <td>{{ row.kbk }}</td>
+            <td>{{ row.detalisation }}</td>
+            <td>{{ row.doc_date }}</td>
+            <td>{{ row.subject }}</td>
+        </tr>
+    {% endfor %}
+</table>

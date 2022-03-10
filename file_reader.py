@@ -220,7 +220,7 @@ class ExcelReader(FrameHandler):
         """
         clean_list = cleaner.ValueCleaner(
             [
-                cell[0].value for cell in self.ws[
+                self.reader_type(cell[0], column) for cell in self.ws[
                     self.excel_cells[column][0]: self.excel_cells[column][1]
                 ]
             ],
@@ -260,6 +260,28 @@ class ExcelReader(FrameHandler):
         """Run a method to write data to the database."""
         self.big_dict_to_sql(self.frame_to_dict(self.list_to_frame()))
         logging.debug('finish file_reader.table_to_sql')
+
+    def reader_type(self, cell_object: openpyxl, column: str):
+        """метод определяет правило по которому считывать данные из ячейки EXCEL.
+
+        Данные в ячейке EXCEL могут быть представлены в нескольких вариантах:
+        просто впечатанные (занесенные) данные
+        данные в виде формулы, в этом случае при открытии файла мы видим уже готовый расчитанный значение, а не саму формулу
+        в первом случае openpyxl cell_object.value
+        во втором случае openpyxl cell_object.Formula
+
+        Args:
+            cell_object (openpyxl): объект-ячейка из которой извлекаем данные
+            column (str): название колонки для которой будет применятся правило
+
+        Returns:
+            Any: данные из ячейки
+        """
+        
+        if 'formula' in self.columns_scheme[column]['excel']:
+            return cell_object.formula # такая хитрость не работает нужно брать отдельный модуль python
+        else:
+            return cell_object.value        
 
     def _excel_cells(self) -> Dict[str, List[str]]:
         """Return the range of readable cells in the column.

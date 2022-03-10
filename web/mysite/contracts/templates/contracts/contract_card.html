@@ -1,0 +1,90 @@
+<h1 align='center' style="color:rgb(240, 61, 16)">
+    <big>Государственные контракты войсковой части 68895</big>
+</h1>
+<h2><a href="{% url 'index' %}">Главная</a></h2>
+<h2><a href="{% url 'contracts' %}">Полный список</a></h2>
+
+<table border="1">
+        <tr>
+            <th>Характеристика</th>
+            <th>Значение</th>
+        </tr>
+    {% for row in table1 %}
+        <tr>
+            <td>Рег номер full</td>
+            <td align='center'>{{ row.reg_number_full }}</td>
+        </tr>
+        <tr>
+            <td>Рег номер</td>
+            <td align='center'>{{ row.reg_number }}</td>
+        </tr>
+        <tr>
+            <td>Предмет</td>
+            <td>{{ row.subject }}</td>
+        </tr>
+        <tr>
+            <td>Контрагент</td>
+            <td>{{ row.partner }}</td>
+        </tr>
+        <tr>
+            <td>Сумма контракта</td>
+            <td>{{ row.amount }}</td>
+        </tr>
+        <tr>
+            <td>Номер контракта</td>
+            <td>{{ row.contract_number }}</td>
+        </tr>
+        <tr>
+            <td>Дата контракта</td>
+            <td>{{ row.contract_date }}</td>
+        </tr>
+        <tr>
+            <td>Код бюджетной классификации</td>
+            <td>{{ row.kbk }}</td>
+        </tr>
+        <tr>
+            <td>Довольствующий орган</td>
+            <td>{{ row.detalisation }}</td>
+        </tr>
+        <tr>
+            <td>Ответственный исполнитель</td>
+            <td align='center'>{{ row.responsible }}</td>
+        </tr>
+        <tr>
+            <td>Дата исполнения контракта</td>
+            <td>{{ row.execution_date }}</td>
+        </tr>
+        <tr>
+            <td>Номер закупки</td>
+            <td>{{ row.state_register_number }}</td>
+        </tr>
+        <tr>
+            <td>Исполнено Всего</td>
+            <td>{{ row.pay_summ }}</td>
+        </tr>
+        <tr>
+            <td>Информация о платежах</td>
+            <td>
+                <tr>
+                    <td>Сумма</td>
+                    <td>Дата ЗКР</td>
+                    <td>Назнанчение</td>
+                </tr>
+                {% for pay in row.pays %}
+                    <tr>
+                        <td>{{ pay.amount }}</td>
+                        <td>{{ pay.date }}</td>
+                        <td>{{ pay.subject }}</td>
+                    </tr>
+                {% endfor %}
+            </td>
+        </tr>
+        
+    {% endfor %}
+    
+    <tr>
+        <td>тестовый словарь pay</td>
+        <td>{{ pay }}</td>
+    </tr>
+    
+</table>

@@ -542,7 +542,7 @@ class ValueCleaner(Cleaner):
         for position in self.list_to_clean:
             try:
                 pad = float(position)
-            except TypeError:
+            except (TypeError, ValueError):
                 pad = float(0)
             new_list.append(float(pad))
         self.list_to_clean = new_list
@@ -597,6 +597,7 @@ class StructureCleaner(Cleaner):
             'commitment_treasury': self._commitment_treasury,
             'plan': self._plan,
             'internal_plan': self._internal_plan,
+            'limits': self._limits,
         }
         self.reg_number_pattern = {
             'year': '0',
@@ -634,14 +635,14 @@ class StructureCleaner(Cleaner):
         clean_frame = pd.DataFrame()
 
         clean_frame['budget_year'] = [
-                                         self.budget_year
-                                     ] * len(self.frame['reg_number'])
+            self.budget_year
+        ] * len(self.frame['reg_number'])
 
         clean_frame['slash'] = ['/'] * len(self.frame['reg_number'])
         clean_frame['short_year'] = [self.budget_year - 2000] * len(self.frame['reg_number'])
 
         clean_frame['reg_number_full'] = self.frame['reg_number'].astype(str) \
-                                         + clean_frame['slash'] + clean_frame['short_year'].astype(str)
+            + clean_frame['slash'] + clean_frame['short_year'].astype(str)
 
         self.frame['budget_year'] = PandasFormat(
             self.table_name,
@@ -655,6 +656,11 @@ class StructureCleaner(Cleaner):
             self.table_name,
             clean_frame,
         ).format_corrector()
+        self.frame['additional_agreement'] = '' * len(self.frame)
+        for i in range(len(self.frame)):
+            self.frame['additional_agreement'].iloc[i] = self._additional(
+                self.frame['subject'].iloc[i],
+            )
         return self.frame
 
     def _payments(self) -> pd.DataFrame:
@@ -679,10 +685,11 @@ class StructureCleaner(Cleaner):
                 clean_frame,
             ).format_corrector()
         # self.frame.to_excel('платеж из 1с.xlsx')
+        # формирую индекс как сумму номера зкр и года
         for i in range(len(self.frame)):
             self.frame['order_number'].iloc[i] = '{0}_{1}'.format(
+                str(self.frame['order_date'].dt.year.iloc[i]),
                 self.frame['order_number'].iloc[i],
-                str(self.frame['order_date'].iloc[i]),
             )
         # self.frame['order_number'] = self.frame['order_number'] + f'_{}'
         return self.frame
@@ -716,8 +723,8 @@ class StructureCleaner(Cleaner):
         Returns:
             pd.DataFrame: new DataFrame
         """
-        # обрезает IKZ до знаков т.к. хвост мешает и вносит путаницу при загрузке и 
-        # форимровании IKZ в других таблицах там че попало, 
+        # обрезает IKZ до знаков т.к. хвост мешает и вносит путаницу при загрузке и
+        # форимровании IKZ в других таблицах там че попало,
         # поэтому и там тоже обрезаем
         for row in self.frame['ikz']:
             location = pd.Index(self.frame['ikz']).get_loc(row)
@@ -877,3 +884,37 @@ class StructureCleaner(Cleaner):
         self.frame.to_excel('tmp/Закупки 2022.xlsx', index=False)
         print(f'create file Закупки.xlsx')
         return self.frame
+
+    def _limits(self):
+        # заполняем пустые строки
+        self.frame['curent_limit'] = round(self.frame['curent_limit']*1000)
+        self.frame['head'] = '202'
+        self.frame['budget_year'] = 2022
+        self.frame['kbk'] = ''
+        self.frame['kbk_index'] = ''
+        self.frame['detalisation'].str.lower()
+        # формирую индекс как сумму номера зкр и года
+        for i in range(len(self.frame)):
+            if len(self.frame['rpr'].iloc[i]) < 4:
+                self.frame['rpr'].iloc[i] = f"0{self.frame['rpr'].iloc[i]}"
+            self.frame['kbk'].iloc[i] = '{0}{1}{2}{3}{4}'.format(
+                self.frame['head'].iloc[i],
+                self.frame['rpr'].iloc[i],
+                self.frame['csr'].iloc[i],
+                self.frame['vr'].iloc[i],
+                self.frame['kosgu'].iloc[i],
+            )
+            self.frame['kbk_index'].iloc[i] = '{0}_{1}_{2}'.format(
+                self.frame['kbk'].iloc[i],
+                self.frame['detalisation'].iloc[i],
+                self.frame['budget_year'].iloc[i],
+            )
+        return self.frame
+
+    def _additional(self, subject: str) -> str:
+        subject_list = subject.lower().split(' ')
+        #print(subject_list)
+        if subject_list[0] == 'д/с' and subject_list[1] == 'к':
+            #print(subject_list[2])
+            return subject_list[2]
+        return 'None'

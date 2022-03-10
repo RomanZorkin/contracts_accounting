@@ -137,18 +137,30 @@ table = {
                 'excel' : [False, ['',''],],
                 'links': ['plan',],
             },
-            'change_number': {
+            'paid_for':{
+                'format' : 'numeric',
+                'SQL' : True,
+                'excel' : [False, ['G81','G303'],], # не заполняем из файла такт как в ячейке формула и  она ее чмитает как текст
+                'links': [],
+            },
+            'additional_agreement': {
                 'format' : 'text',
                 'SQL' : True,
                 'excel' : [False, ['', ''],],
                 'links': [],
             },
-            'paid_for':{
-                'format' : 'numeric',
+            'scan_path': {
+                'format' : 'text',
                 'SQL' : True,
-                'excel' : [False, ['',''],],
+                'excel' : [False, ['', ''],],
                 'links': [],
-            },            
+            },
+            'department': {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [False, ['', ''],],
+                'links': [],
+            },
         },
     },
     'purchases' : {
@@ -871,6 +883,82 @@ table = {
                 'links': [],
             },
         },
+    },
+    'limits': {
+        'table_name' : 'limits',
+        'file_format':'excel',
+        'work_sheet' : 'OpDan',
+        'file_path' : 'external_data_source/OpDan .xlsx',
+        'excel_rows' : ['9', '171'],
+        'budget_year':'',
+        'columns' : {
+            'kbk_index' : {
+                'format' : 'text PRIMARY KEY',
+                'SQL' : True,
+                'excel' : [False, ['', ''],],
+                'links': [],
+            },
+            'head' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [False, ['', ''],],
+                'links': [],
+            },
+            'rpr' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['C9', 'C171'],],
+                'links': [],
+            },
+            'csr' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['D9', 'D171'],],
+                'links': [],
+            },
+            'vr' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['E9', 'E171'],],
+                'links': [],
+            },
+            'kosgu' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['F9', 'F171'],],
+                'links': [],
+            },
+            'detalisation' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [True, ['B9', 'B171'],],
+                'links': [],
+            },
+            'curent_limit' : {
+                'format' : 'numeric',
+                'SQL' : True,
+                'excel' : [True, ['G9', 'G171'],],
+                'links': [],
+            },
+            'kbk' : {
+                'format' : 'text',
+                'SQL' : True,
+                'excel' : [False, ['', ''],],
+                'links': [],
+            },
+            'budget_year' :{
+                'format' : 'integer',
+                'SQL' : True,
+                'excel' : [False, ['',''],],
+                'links': [],
+            },
+            'download_date' : {
+                'format' : 'date',
+                'SQL' : True,
+                'excel' : [False, ['',''],],
+                'links': [],
+            },
+        },  
     },
 }
 
