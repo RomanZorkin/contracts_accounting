@@ -17,7 +17,7 @@ class Budget_commitment(Base):
     advance_value = Column(Float)
     amount = Column(Float)
     commitment_date = Column(Date)
-    commitment_number = Column(Text)
+    commitment_number = Column(Text, ForeignKey('commitment_treasury.commitment_number'))
     contract_date = Column(Date)
     contract_identificator = Column(Text)
     contract_number = Column(Text)
@@ -48,6 +48,7 @@ class Commitment_treasury(Base):
     status = Column(Text)
     subject = Column(Text)
     type = Column(Text)
+    commitments = relationship('Budget_commitment', backref='commitment_treasury')
 
 
 class Deals(Base):
@@ -126,7 +127,7 @@ class Payments_full(Base):
     reg_number = Column(Integer)
     reg_number_full = Column(Text, ForeignKey('deals.reg_number_full'))
     subjekt = Column(Text)
-    year = Column(Text)
+    year = Column(Integer)
 
 
 class Payments_short(Base):
@@ -165,6 +166,7 @@ class Plan(Base):
     publish_year = Column(Float)
     state_register_number = Column(Text)
     subject = Column(Text)
+    cancel_tag = Column(Boolean)
     int_plan = relationship('Internal_plan', backref='plan')
 
 

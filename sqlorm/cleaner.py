@@ -454,6 +454,10 @@ class PandasFormat(Cleaner):
             pd.DataFrame: DataFrame with formatted bool.
         """
         logging.debug('start _to_bool PandasFormat')
+        #print(self.frame)
+        for i, row in self.frame.iterrows():
+            print(row, type(row))
+        
         return self.frame.astype('boolean').fillna(False)
 
 
@@ -684,14 +688,22 @@ class StructureCleaner(Cleaner):
                 self.table_name,
                 clean_frame,
             ).format_corrector()
-        # self.frame.to_excel('платеж из 1с.xlsx')
+        # Удаляем дублирующие строки
+        self.frame = self.frame[
+            self.frame['primary_doc_form'].str.contains("УИН|контракт|ИГК|Договор") == False
+        ]
+        # Удаляем дублирующие строки по признаку ДО - все кроме аренды
+        self.frame = self.frame.loc[
+            ~((self.frame['primary_doc_form'] == 'ДО') & (self.frame['kosgu'] != '224'))
+            ]
+        # self.frame.to_excel('otcheti/платеж из 1с.xlsx')
         # формирую индекс как сумму номера зкр и года
         for i in range(len(self.frame)):
             self.frame['order_number'].iloc[i] = '{0}_{1}'.format(
                 str(self.frame['order_date'].dt.year.iloc[i]),
-                self.frame['order_number'].iloc[i],
+                self.frame['order_number'].iloc[i]
             )
-        # self.frame['order_number'] = self.frame['order_number'] + f'_{}'
+        
         return self.frame
 
     def _commitment_treasury(self) -> pd.DataFrame:
@@ -715,6 +727,7 @@ class StructureCleaner(Cleaner):
         self.frame = self.frame[
             self.frame['status'] == 'Отражен на ЛС'
             ]
+        print(self.frame)
         return self.frame
 
     def _plan(self) -> pd.DataFrame:
@@ -881,7 +894,7 @@ class StructureCleaner(Cleaner):
         numeric_columns = ['amount_new', 'amount']
         for column in numeric_columns:
             self.frame[column] = pd.to_numeric(self.frame[column])
-        self.frame.to_excel('tmp/Закупки 2022.xlsx', index=False)
+        self.frame.to_excel('otcheti/Закупки 2022.xlsx', index=False)
         print(f'create file Закупки.xlsx')
         return self.frame
 

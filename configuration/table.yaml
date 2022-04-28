@@ -880,7 +880,7 @@ payments_full:
       - false
       - - ''
         - ''
-      format: text
+      format: integer
       links: []
   excel_rows:
   - '7'
@@ -1086,6 +1086,12 @@ plan:
       xml:
       - null
       - .//{http://zakupki.gov.ru/oos/base/1}OKPDCode
+    cancel_tag:
+      SQL: true
+      format: text
+      xml:
+      - null
+      - .//{http://zakupki.gov.ru/oos/TPtypes/1}positionCanceled
     ikz:
       SQL: true
       format: text PRIMARY KEY

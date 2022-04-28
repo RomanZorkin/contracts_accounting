@@ -372,7 +372,7 @@ class PandasCleaner(Cleaner):
         numeric_columns = ['amount_new', 'amount']
         for column in numeric_columns:
             self.frame[column] = pd.to_numeric(self.frame[column])
-        self.frame.to_excel('tmp/Закупки 2022.xlsx', index=False)
+        self.frame.to_excel('otcheti/Закупки 2022.xlsx', index=False)
         print(f'create file Закупки.xlsx')
         return self.frame
 

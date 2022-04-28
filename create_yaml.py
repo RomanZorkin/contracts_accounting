@@ -574,7 +574,7 @@ table = {
                 'links': [],
             },
             'year' : {
-                'format' : 'text',
+                'format' : 'integer',
                 'SQL' : True,
                 'excel' : [False, ['', ''],],
                 'links': [],
@@ -753,6 +753,14 @@ table = {
                     './/{http://zakupki.gov.ru/oos/base/1}OKPDCode',
                 ],
                 'links': [],
+            },
+            'cancel_tag': {
+                'format': 'text',
+                'SQL' : True,
+                'xml' : [
+                    None,
+                    './/{http://zakupki.gov.ru/oos/TPtypes/1}positionCanceled',
+                ],
             },
         },
     },
